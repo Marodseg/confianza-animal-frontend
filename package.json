@@ -8,7 +8,8 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "prettier:check": "prettier --config .prettierrc --check \"src/**/*.{ts,css,html}\"",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "lint": "ng lint"
   },
   "private": true,
   "dependencies": {
@@ -26,14 +27,22 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^14.2.0",
+    "@angular-eslint/builder": "14.0.3",
+    "@angular-eslint/eslint-plugin": "14.0.3",
+    "@angular-eslint/eslint-plugin-template": "14.0.3",
+    "@angular-eslint/schematics": "14.0.3",
+    "@angular-eslint/template-parser": "14.0.3",
     "@angular/cli": "~14.2.0",
     "@angular/compiler-cli": "^14.0.0-next.0",
     "@types/jasmine": "~4.0.0",
-    "@typescript-eslint/eslint-plugin": "^5.35.1",
-    "eslint": "^8.22.0",
+    "@typescript-eslint/eslint-plugin": "5.29.0",
+    "@typescript-eslint/parser": "5.29.0",
+    "eslint": "^8.18.0",
+    "eslint-config-prettier": "^8.5.0",
     "eslint-config-standard-with-typescript": "^22.0.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-n": "^15.2.5",
+    "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-promise": "^6.0.1",
     "husky": "^8.0.1",
     "jasmine-core": "~4.3.0",
@@ -44,6 +53,7 @@
     "karma-jasmine-html-reporter": "~2.0.0",
     "lint-staged": "^13.0.3",
     "prettier": "^2.7.1",
+    "prettier-eslint": "^15.0.1",
     "tslint-config-prettier": "^1.18.0",
     "typescript": "^4.8.2"
   },
