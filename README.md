@@ -18,10 +18,10 @@ Run `ng generate component component-name` to generate a new component. You can 
 
 ## Code formatting
 
-Run `npm run prettier:check` to check if the code is formatted correctly. Another option
+Run `npm run prettier:check` to check if the code is formatted correctly. Another option to check for a specific file 
 is `npx prettier --check "src/*.ts"`.
 
-Run `npx prettier --write "src/*.ts"` to format the code of the selected file.
+Run `npx prettier --write "src/*.ts"` to format the code of the file.
 
 ## Build
 
