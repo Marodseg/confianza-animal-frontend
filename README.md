@@ -19,7 +19,8 @@ Don't confuse this with the `prettier` command, which is used to format the code
 
 ## Code formatting
 
-In case you don't configure husky, you can run `npm run lint` to reformat the code.
+In case you don't configure husky, you can run `npm run lint` to check the code format. You can 
+also add the `--fix` flag to automatically fix the code format (if possible).
 
 Run `npm run prettier:check` to check if the code is formatted correctly. Another option to check for a specific file
 is `npx prettier --check "src/*.ts"`.
