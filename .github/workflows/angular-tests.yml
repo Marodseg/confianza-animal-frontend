@@ -1,4 +1,4 @@
-name: Angular CI
+name: Angular tests
 
 # Controls when the action will run. 
 on:
