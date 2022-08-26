@@ -7,7 +7,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "prettier:check": "prettier --config .prettierrc --check \"src/**/*.{ts,css,html}\""
+    "prettier:check": "prettier --config .prettierrc --check \"src/**/*.{ts,css,html}\"",
+    "prepare": "husky install"
   },
   "private": true,
   "dependencies": {
@@ -41,10 +42,10 @@
     "typescript": "~4.7.2"
   },
   "lint-staged": {
-      "src/**/*.{js,ts,scss,md,html,json}": [
-        "prettier --write",
-        "git add"
-      ]
+    "src/**/*.{js,ts,scss,md,html,json}": [
+      "prettier --write",
+      "git add"
+    ]
   },
   "husky": {
     "hooks": {
