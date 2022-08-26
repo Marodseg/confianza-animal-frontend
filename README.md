@@ -12,11 +12,16 @@ Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The appli
 
 Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-## Code formatting
+## Husky Git hooks
 
 **For the first time** run `npm run prepare` to install husky. After that, when you make a change to the source files, automatically it runs `npm run format` to format the code (if possible).
 
-Run `npm run prettier:check` to check if the code is formatted correctly.
+## Code formatting
+
+Run `npm run prettier:check` to check if the code is formatted correctly. Another option 
+is `npx prettier --check "src/*.ts"`.
+
+Run `npx prettier --write "src/*.ts"` to format the code of the selected file.
 
 ## Build
 
