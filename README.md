@@ -1,6 +1,8 @@
 # Confianza Animal
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.2.0.
+## Install project dependencies
+
+Run `npm install` to install the dependencies and being able to run the application.
 
 ## Development server
 
@@ -9,6 +11,12 @@ Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The appli
 ## Code scaffolding
 
 Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+
+## Code formatting
+
+**For the first time** run `npm run prepare` to install husky. After that, when you make a change to the source files, automatically it runs `npm run format` to format the code (if possible).
+
+Run `npm run prettier:check` to check if the code is formatted correctly.
 
 ## Build
 
