@@ -14,12 +14,14 @@ Run `ng generate component component-name` to generate a new component. You can 
 
 ## Husky Git hooks
 
-**For the first time** run `npm run prepare` to install husky. After that, when you make a change to the source files, automatically it runs `lint` to reformat the code (if possible). 
-Don't confuse this with the `prettier` command, which is used to format the code before committing. 
+**For the first time** run `npm run prepare` to install husky. After that, when you make a change to the source files, automatically it runs `lint` to reformat the code (if possible).
+Don't confuse this with the `prettier` command, which is used to format the code before committing.
 
 ## Code formatting
 
-Run `npm run prettier:check` to check if the code is formatted correctly. Another option to check for a specific file 
+In case you don't configure husky, you can run `npm run lint` to reformat the code.
+
+Run `npm run prettier:check` to check if the code is formatted correctly. Another option to check for a specific file
 is `npx prettier --check "src/*.ts"`.
 
 Run `npx prettier --write "src/*.ts"` to format the code of the file.
