@@ -23,7 +23,7 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      - name: npm install and npm run CI commands
+      - name: Install dependencies and run tests
         run: |
           npm i
           npm run test:ci
