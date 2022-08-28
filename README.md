@@ -1,4 +1,4 @@
-# Confianza Animal
+# Confianza Animal frontend
 
 ## Install project dependencies
 
