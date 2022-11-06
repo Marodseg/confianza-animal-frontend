@@ -1,0 +1,39 @@
+<nav
+  class="navbar navbar-expand-sm navbar-dark bg-primary flex-sm-nowrap flex-wrap">
+  <div class="container-fluid">
+    <button
+      class="navbar-toggler flex-grow-sm-1 flex-grow-0 me-2"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarTitle">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <a href="" class="navbar-brand flex-grow-1">Confianza Animal</a>
+    <div
+      class="navbar-collapse collapse flex-grow-1 justify-content-center w-100"
+      id="navbarTitle">
+      <ul class="navbar-nav mx-auto" style="margin-right: 10% !important">
+        <li class="nav-item" style="margin-left: 30px !important">
+          <a class="nav-link" [routerLink]="'/profile'">Perfil</a>
+        </li>
+        <li class="nav-item" style="margin-left: 30px !important">
+          <a class="nav-link" [routerLink]="'/animals'">Mis animales</a>
+        </li>
+        <li class="nav-item" style="margin-left: 30px !important">
+          <a class="nav-link" [routerLink]="'/petitions'">Peticiones</a>
+        </li>
+      </ul>
+      <ul class="navbar-nav ms-auto flex-nowrap">
+        <li class="nav-item">
+          <button
+            type="button"
+            class="btn btn-outline-light"
+            (click)="authService.logout()">
+            Logout
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<router-outlet></router-outlet>

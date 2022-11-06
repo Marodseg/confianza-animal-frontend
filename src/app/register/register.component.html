@@ -1,0 +1,221 @@
+<section class="vh-100" style="background-color: #eee">
+  <div class="container h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-lg-12 col-xl-11">
+        <div class="card text-black" style="border-radius: 25px">
+          <div class="card-body p-md-5">
+            <div class="row justify-content-center">
+              <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
+                <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">
+                  Nueva organización
+                </p>
+
+                <form
+                  class="mx-1 mx-md-4"
+                  [formGroup]="registerForm"
+                  novalidate>
+                  <div class="d-flex flex-row align-items-center mb-4">
+                    <i class="fas fa-user fa-lg me-3 fa-fw"></i>
+                    <div class="form-outline flex-fill mb-0">
+                      <label class="form-label" for="nameRegister"
+                        >Nombre público</label
+                      >
+                      <input
+                        type="text"
+                        formControlName="name"
+                        placeholder="Nombre de la organización"
+                        id="nameRegister"
+                        class="form-control" />
+                      <small
+                        class="text-danger"
+                        *ngIf="name?.errors?.required && name?.touched">
+                        El nombre es obligatorio
+                      </small>
+                    </div>
+                  </div>
+
+                  <div class="d-flex flex-row align-items-center mb-4">
+                    <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
+                    <div class="form-outline flex-fill mb-0">
+                      <label class="form-label" for="phoneRegister"
+                        >Teléfono</label
+                      >
+                      <input
+                        type="tel"
+                        id="phoneRegister"
+                        formControlName="phone"
+                        placeholder="Teléfono de la organización"
+                        pattern="^\+34\d{9}$"
+                        aria-describedby="phoneHelpInline"
+                        class="form-control" />
+                      <small
+                        id="phoneHelpInline"
+                        class="text-muted"
+                        *ngIf="!phone?.touched">
+                        Debe contener el prefijo +34
+                      </small>
+                      <small
+                        class="text-danger"
+                        *ngIf="phone?.errors?.required && phone?.touched">
+                        El número de teléfono es obligatorio
+                      </small>
+                      <small
+                        class="text-danger"
+                        *ngIf="phone?.errors?.pattern && phone?.touched">
+                        El número de teléfono no es válido (+34XXXXXXXXX)
+                      </small>
+                    </div>
+                  </div>
+
+                  <div class="d-flex flex-row align-items-center mb-4">
+                    <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
+                    <div class="form-outline flex-fill mb-0">
+                      <label class="form-label" for="provinceRegister"
+                        >Provincia</label
+                      >
+
+                      <input
+                        class="form-control"
+                        formControlName="province"
+                        list="datalistOptions"
+                        id="provinceRegister"
+                        placeholder="Buscar provincia..." />
+
+                      <datalist id="datalistOptions">
+                        <option
+                          [value]="province"
+                          *ngFor="let province of provinces"></option>
+                      </datalist>
+
+                      <small
+                        class="text-danger"
+                        *ngIf="
+                          !isProvince(province?.value) && province?.touched
+                        ">
+                        La provincia es obligatoria y debe ser una de la lista
+                      </small>
+                    </div>
+                  </div>
+
+                  <div class="d-flex flex-row align-items-center mb-4">
+                    <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
+                    <div class="form-outline flex-fill mb-0">
+                      <label class="form-label" for="emailRegister"
+                        >Correo</label
+                      >
+                      <input
+                        type="email"
+                        id="emailRegister"
+                        placeholder="Correo de la organización"
+                        formControlName="email"
+                        pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
+                        class="form-control" />
+                      <small
+                        class="text-danger"
+                        *ngIf="email?.errors?.required && email?.touched">
+                        El correo es obligatorio
+                      </small>
+                      <small
+                        class="text-danger"
+                        *ngIf="email?.errors?.pattern && email?.touched">
+                        El correo introducido no es válido
+                      </small>
+                    </div>
+                  </div>
+
+                  <div class="d-flex flex-row align-items-center mb-4">
+                    <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
+                    <div class="form-outline flex-fill mb-0">
+                      <label class="form-label" for="passwordRegister"
+                        >Contraseña</label
+                      >
+                      <input
+                        type="password"
+                        id="passwordRegister"
+                        placeholder="Contraseña de la organización"
+                        aria-describedby="passwordHelpInline"
+                        formControlName="password"
+                        class="form-control" />
+                      <small
+                        id="passwordHelpInline"
+                        class="text-muted"
+                        *ngIf="!password?.touched">
+                        Debe tener al menos 6 caracteres
+                      </small>
+                      <small
+                        class="text-danger"
+                        *ngIf="
+                          password?.hasError('minlength') && password?.touched
+                        ">
+                        La contraseña tiene menos de 6 caracteres
+                      </small>
+                      <small
+                        class="text-danger"
+                        *ngIf="password?.errors?.required && password?.touched">
+                        La contraseña es obligatoria
+                      </small>
+                    </div>
+                  </div>
+
+                  <div class="d-flex flex-row align-items-center mb-4">
+                    <i class="fas fa-key fa-lg me-3 fa-fw"></i>
+                    <div class="form-outline flex-fill mb-0">
+                      <label class="form-label" for="confirmPasswordRegister"
+                        >Repite la contraseña</label
+                      >
+                      <input
+                        type="password"
+                        id="confirmPasswordRegister"
+                        formControlName="confirmPassword"
+                        placeholder="Contraseña de la organización"
+                        pattern="{{ registerForm.get('password')?.value }}"
+                        class="form-control" />
+                      <small
+                        class="text-danger"
+                        *ngIf="
+                          registerForm.get('confirmPassword')?.errors
+                            ?.pattern &&
+                          registerForm.get('confirmPassword')?.touched
+                        ">
+                        Las contraseñas no coinciden
+                      </small>
+                    </div>
+                  </div>
+
+                  <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                    <button
+                      type="button"
+                      class="btn btn-primary btn-lg"
+                      [disabled]="registerForm.invalid"
+                      (click)="register()">
+                      Registrar
+                    </button>
+                  </div>
+                </form>
+
+                <div class="d-flex justify-content-center">
+                  <p>
+                    ¿Ya tienes una cuenta?
+                    <a
+                      [routerLink]="'/login'"
+                      routerLinkActive="active"
+                      class="text-primary fw-bold">
+                      Login</a
+                    >
+                  </p>
+                </div>
+              </div>
+              <div
+                class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
+                <img
+                  src="assets/logo.png"
+                  class="img-fluid"
+                  alt="Sample image" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
