@@ -1,4 +1,4 @@
-<div class="container-xl px-4 mt-4">
+<div class="container-xl px-4 mt-4" *ngIf="(organization$ | async)?.photo">
   <hr class="mt-0 mb-4" />
   <div class="row">
     <div class="col-xl-4">
@@ -9,7 +9,11 @@
           <!-- Profile picture image-->
           <img
             class="img-account-profile"
-            [src]="(organization$ | async)?.photo"
+            [src]="
+              (organization$ | async)?.photo !== null
+                ? (organization$ | async)?.photo
+                : 'https://dummyimage.com/254x190/ffffff/000000.png&text=No+hay+foto'
+            "
             alt="" />
           <!-- Profile picture help block-->
           <div class="small font-italic text-muted mb-4">JPG or PNG</div>
@@ -19,7 +23,7 @@
             class="btn-primary btn p-1"
             type="file"
             accept="image/*"
-            (change)="processFile(imageInput)" />
+            (change)="processImage(imageInput)" />
         </div>
       </div>
     </div>
@@ -28,8 +32,7 @@
       <div class="card mb-4" *ngIf="organization$ | async">
         <div class="card-header">Detalles de la cuenta</div>
         <div class="card-body">
-          <form>
-            <!-- Form Group (username)-->
+          <form [formGroup]="profileForm">
             <div class="mb-3">
               <label class="small mb-1" for="inputUsername"
                 >Nombre de la organización</label
@@ -39,6 +42,7 @@
                 id="inputUsername"
                 type="text"
                 placeholder="Name"
+                style="background-color: #f2f6fc"
                 [value]="(organization$ | async)?.name"
                 disabled />
             </div>
@@ -50,6 +54,7 @@
               <input
                 class="form-control"
                 id="inputEmail"
+                style="background-color: #f2f6fc"
                 type="text"
                 placeholder="Correo"
                 [value]="(organization$ | async)?.email"
@@ -67,25 +72,58 @@
                   class="form-control"
                   id="inputPhone"
                   type="tel"
+                  pattern="^\+34\d{9}$"
+                  formControlName="phone"
                   placeholder="+34XXXXXXXXX"
                   [value]="(organization$ | async)?.phone" />
+
+                <div *ngIf="phone?.errors?.pattern && phone?.touched">
+                  <small class="text-danger"
+                    >El teléfono debe contener 9 dígitos y el prefijo +34</small
+                  >
+                </div>
+
+                <div *ngIf="phone?.errors?.required && phone?.touched">
+                  <small class="text-danger">El teléfono es obligatorio</small>
+                </div>
               </div>
               <!-- Form Group (birthday)-->
               <div class="col-md-6">
-                <label class="small mb-1" for="inputZone">Provincia</label>
+                <label class="form-label" for="provinceRegister"
+                  >Provincia</label
+                >
+
                 <input
                   class="form-control"
-                  id="inputZone"
-                  type="text"
-                  name="birthday"
-                  placeholder="Selecciona tu provincia"
-                  [value]="(organization$ | async)?.zone" />
+                  formControlName="zone"
+                  list="datalistOptions"
+                  id="provinceRegister"
+                  placeholder="Buscar provincia..." />
+
+                <datalist id="datalistOptions">
+                  <option
+                    [value]="province"
+                    *ngFor="let province of provinces"></option>
+                </datalist>
+
+                <small
+                  class="text-danger"
+                  *ngIf="!isProvince(zone?.value) && zone?.touched">
+                  La provincia es obligatoria y debe ser una de la lista
+                </small>
               </div>
             </div>
 
             <div class="row gx-3 mb-3">
               <div class="col-md-6">
-                <button class="btn btn-primary" type="button">
+                <button
+                  class="btn btn-primary"
+                  type="button"
+                  [disabled]="
+                    profileForm.invalid ||
+                    (!isProvince(zone?.value) && zone?.touched)
+                  "
+                  (click)="updateProfile()">
                   Guardar cambios
                 </button>
               </div>

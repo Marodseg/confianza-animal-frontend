@@ -1,1 +1,152 @@
-<p>petitions works!</p>
+<div
+  class="row col-xs-12 col-sm-8 col-md-9 col-lg-11 justify-content-center"
+  style="width: 100%; margin-top: 25px">
+  <div
+    class="card p-2 m-3 shadow p-3 mb-5 rounded"
+    style="width: min-content"
+    *ngFor="let petition of petitions">
+    <img
+      [src]="
+        petition.cat && petition.cat.photos[0] !== undefined
+          ? petition.cat.photos[0]
+          : petition.dog && petition.dog.photos[0] !== undefined
+          ? petition.dog.photos[0]
+          : 'https://dummyimage.com/400x400/ffffff/000000.png&text=Subir+foto'
+      "
+      class="card-img-top"
+      style="min-height: 15rem; max-height: 15rem"
+      alt="..." />
+    <div
+      class="card-body"
+      style="
+        width: 20rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+      ">
+      <h3
+        class="card-title mb-4"
+        style="font-size: 20px; text-align: center; cursor: pointer"
+        (click)="editAnimal(petition.cat ? petition.cat : petition.dog)">
+        {{ petition.cat ? petition.cat.name : petition.dog.name }}
+        &nbsp;
+        <i class="fas fa-eye"></i>
+      </h3>
+      <h4
+        class="card-subtitle mb-2"
+        style="font-size: 14px; font-weight: 500; text-decoration: underline">
+        Usuario:
+      </h4>
+      <h4 class="card-subtitle mb-2" style="font-size: 14px">
+        {{ petition.user_name }}
+      </h4>
+      <h4
+        class="card-subtitle mb-2"
+        style="font-size: 14px; font-weight: 500; text-decoration: underline">
+        Correo:
+      </h4>
+      <h4 class="card-subtitle mb-2" style="font-size: 14px">
+        {{ petition.user_email }}
+      </h4>
+      <h4
+        class="card-subtitle mb-2"
+        style="font-size: 14px; font-weight: 500; text-decoration: underline">
+        Motivo de adopción:
+      </h4>
+      <h4 class="card-subtitle mb-2" style="font-size: 14px">
+        {{ petition.message !== 'null' ? petition.message : 'N/A' }}
+      </h4>
+      <h4
+        class="card-subtitle mb-2"
+        style="font-size: 14px; font-weight: 500; text-decoration: underline">
+        Fecha de la petición:
+      </h4>
+      <h4 class="card-subtitle mb-2" style="font-size: 14px; font-weight: 500">
+        {{ petition.date | date: 'dd/MM/yyyy' }}
+      </h4>
+      <h4
+        class="card-subtitle mb-2"
+        style="font-size: 14px; font-weight: 500; text-decoration: underline">
+        Estado de la petición:
+      </h4>
+      <h4
+        class="card-subtitle mb-4"
+        style="font-size: 14px; font-weight: 500"
+        [ngStyle]="{
+          color:
+            petition.status === 'Aceptada'
+              ? '#32cf32'
+              : petition.status === 'Rechazada'
+              ? 'red'
+              : '#b9b041'
+        }">
+        {{ petition.status }}
+      </h4>
+      <div style="display: flex; flex-direction: row; justify-content: center">
+        <button
+          class="btn btn-primary"
+          (click)="open(contentAccept)"
+          style="background-color: #26a126; margin-right: 15px"
+          *ngIf="
+            petition.status === 'Pendiente' || petition.status === 'Rechazada'
+          ">
+          <i class="fas fa-check"></i> Aceptar
+        </button>
+        <button
+          class="btn btn-danger"
+          style="margin-right: 0"
+          (click)="open(contentReject)"
+          *ngIf="
+            petition.status === 'Pendiente' || petition.status === 'Aceptada'
+          ">
+          <i class="fas fa-xmark"></i> Rechazar
+        </button>
+      </div>
+
+      <ng-template #contentAccept let-c="close" let-d="dismiss">
+        <div class="modal-header">
+          <h2 class="modal-title">Aceptar petición</h2>
+          <button
+            type="button"
+            class="btn-close"
+            aria-label="Close"
+            (click)="d('Cross click')"></button>
+        </div>
+        <div class="modal-body">
+          <h3>¿Estás seguro de que quieres aceptar la petición?</h3>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-outline-primary"
+            (click)="acceptPetition(petition.id)">
+            Aceptar
+          </button>
+        </div>
+      </ng-template>
+
+      <ng-template #contentReject let-c="close" let-d="dismiss">
+        <div class="modal-header">
+          <h2 class="modal-title">Rechazar petición</h2>
+          <button
+            type="button"
+            class="btn-close"
+            aria-label="Close"
+            (click)="d('Cross click')"></button>
+        </div>
+        <div class="modal-body">
+          <h3>¿Estás seguro de que quieres rechazar la petición?</h3>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-outline-danger"
+            (click)="deletePetition(petition.id)">
+            Borrar
+          </button>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>
+<router-outlet></router-outlet>

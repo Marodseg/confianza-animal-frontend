@@ -16,6 +16,9 @@ import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { UserService } from './services/user/user.service';
 import { FilterService } from './services/filter/filter.service';
+import { StoreModule } from '@ngrx/store';
+import { AnimalService } from './services/animals/animal.service';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 if (environment.production) {
   enableProdMode();
@@ -31,10 +34,12 @@ bootstrapApplication(AppComponent, {
       BrowserModule,
       QuicklinkModule,
       FontAwesomeModule,
+      NgbModule,
       ToastrModule.forRoot({
         preventDuplicates: true,
         positionClass: 'toast-bottom-center',
       }),
+      StoreModule.forRoot({}),
     ]),
     provideAnimations(),
     AuthService,
@@ -46,5 +51,6 @@ bootstrapApplication(AppComponent, {
     ToastrService,
     UserService,
     FilterService,
+    AnimalService,
   ],
 }).catch(err => console.error(err));

@@ -1,0 +1,91 @@
+<div class="d-flex flex-row mt-3 justify-content-center mb-4">
+  <div class="mx-3">
+    <button
+      class="btn btn-primary"
+      (click)="goToCats()"
+      style="margin-right: 20px">
+      <i class="fa-solid fa-cat" style="margin-right: 5px"></i>
+      Ver gatos
+    </button>
+
+    <button class="btn btn-primary" (click)="goToAll()">
+      <i class="fa-solid fa-cat" style="margin-right: 5px"></i>
+      Ver todos
+      <i class="fa-solid fa-dog" style="margin-left: 5px"></i>
+    </button>
+  </div>
+  <button
+    class="btn btn-primary ms-5"
+    id="show_more_cards"
+    (click)="newAnimal(true)">
+    <i class="fa-solid fa-plus-circle"></i> Añadir animal
+  </button>
+</div>
+<div
+  class="row col-xs-12 col-sm-8 col-md-9 col-lg-11 justify-content-center"
+  style="margin-left: 10px !important">
+  <div
+    class="card p-2 m-3 shadow p-3 mb-5 bg-light rounded"
+    style="width: 18rem"
+    *ngFor="let dog of dogs">
+    <img
+      class="card-img-top rounded"
+      [src]="
+        dog.photos[0] !== undefined
+          ? dog.photos[0]
+          : 'https://dummyimage.com/254x190/ffffff/000000.png&text=No+hay+fotos'
+      " />
+    <div class="card-body text-center">
+      <h2 class="card-title">
+        <b>{{ dog.name }}</b>
+      </h2>
+      <ul class="list-group mb-4" style="font-size: 17px">
+        <li class="list-group-item list-group-item-info">
+          <i class="fa-solid fa-venus-mars" style="font-size: 20px"></i>
+          {{ dog.gender }}
+        </li>
+        <li class="list-group-item list-group-item-info">
+          <i class="fa fa-user" style="font-size: 20px"></i>
+          {{ dog.neutered === true ? 'Castrado' : 'Sin castrar' }}
+        </li>
+        <li class="list-group-item list-group-item-info">
+          <i class="fa-solid fa-clock-rotate-left" style="font-size: 20px"></i>
+          {{ dog.is_urgent ? 'Urgente' : 'No urgente' }}
+        </li>
+      </ul>
+      <button
+        type="button"
+        (click)="editDog(dog?.id)"
+        class="btn btn-primary"
+        style="margin-right: 10px">
+        <i class="fa-solid fa-edit"></i>
+      </button>
+      <button type="button" (click)="open(contentDog)" class="btn btn-danger">
+        <i class="fa-solid fa-trash"></i>
+      </button>
+
+      <ng-template #contentDog let-c="close" let-d="dismiss">
+        <div class="modal-header">
+          <h2 class="modal-title">Borrar animal</h2>
+          <button
+            type="button"
+            class="btn-close"
+            aria-label="Close"
+            (click)="d('Cross click')"></button>
+        </div>
+        <div class="modal-body">
+          <h3>¿Estás seguro de que quieres borrar el animal?</h3>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-outline-danger"
+            (click)="deleteDog(dog?.id)">
+            Borrar
+          </button>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>
+<router-outlet></router-outlet>

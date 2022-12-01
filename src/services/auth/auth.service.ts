@@ -8,8 +8,6 @@ import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import {
   LoginResponse,
-  Register,
-  RegisterResponse,
   RestorePasswordResponse,
 } from '../../app/interfaces/interfaces';
 
@@ -47,7 +45,7 @@ export class AuthService {
           return data.token;
         },
         catchError(error => {
-          // this.toastr.error(error.error.detail, '', { timeOut: 4000 });
+          this.toastr.error(error.error.detail, '', { timeOut: 4000 });
           return error;
         })
       )
@@ -79,21 +77,24 @@ export class AuthService {
     if (token) {
       const decodedToken = this.jwtHelper.decodeToken(token);
       if (decodedToken.exp < Date.now() / 1000) {
-        this.logout();
+        this.logout(true);
         return false;
       }
     }
     return localStorage.getItem(this.tokenName) !== null;
-    // return !this.jwtHelper.isTokenExpired(); YO CREO QUE CON LO QUE HAY, YA VALE
   }
 
   /**
    * Remove the token from local storage and redirects the user to login page
    */
-  public logout(): void {
+  public logout(tokenExpired: boolean = false): void {
     this.cookieService.delete(this.tokenName);
     localStorage.removeItem(this.tokenName);
     this.route.navigate(['/login']);
-    this.toastr.info('Se ha cerrado la sesión');
+    if (tokenExpired) {
+      this.toastr.info('Su sesión ha expirado. Vuelva a iniciar sesión');
+    } else {
+      this.toastr.info('Se ha cerrado la sesión');
+    }
   }
 }

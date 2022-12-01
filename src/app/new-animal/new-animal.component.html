@@ -1,0 +1,432 @@
+<form [formGroup]="addAnimalForm">
+  <div class="d-flex flex-row mt-3 justify-content-center">
+    <div class="mx-3">
+      <input
+        class="btn-check"
+        type="checkbox"
+        id="dogCheckbox"
+        formControlName="addDog" />
+      <label class="btn btn-outline-primary" for="dogCheckbox"
+        ><i class="fa-solid fa-dog"></i> Añadir perro</label
+      >
+    </div>
+    <div>
+      <input
+        class="btn-check"
+        type="checkbox"
+        id="catCheckbox"
+        formControlName="addCat" />
+      <label class="btn btn-outline-primary" for="catCheckbox"
+        ><i class="fa-solid fa-cat"></i> Añadir gato</label
+      >
+    </div>
+  </div>
+</form>
+
+<div class="container-xl px-4 mt-4" style="text-align: -webkit-center">
+  <hr class="mt-0 mb-4" />
+  <div class="col-xl-8 mw-300">
+    <!-- Account details card-->
+    <div class="card mb-4" style="text-align: initial">
+      <div class="card-header">Nuevo animal</div>
+      <div class="card-body">
+        <form [formGroup]="newAnimalForm">
+          <div class="mb-3">
+            <label class="small mb-1" for="inputUsername"
+              >Nombre del animal</label
+            >
+            <input
+              class="form-control"
+              id="inputUsername"
+              type="text"
+              placeholder="Nombre"
+              formControlName="name" />
+
+            <small
+              class="text-danger"
+              *ngIf="name?.errors?.required && name?.touched">
+              El nombre es obligatorio
+            </small>
+          </div>
+
+          <div class="mb-3">
+            <label class="small mb-1" for="inputAge">Edad (en años)</label>
+            <input
+              class="form-control"
+              id="inputAge"
+              formControlName="age"
+              type="number"
+              placeholder="Edad" />
+
+            <small
+              class="text-danger"
+              *ngIf="age?.errors?.required && age?.touched">
+              La edad es obligatoria
+            </small>
+          </div>
+
+          <div class="mb-3">
+            <label class="small mb-1" for="inputGender">Sexo</label>
+            <input
+              class="form-control"
+              formControlName="gender"
+              list="datalistGenderOptions"
+              id="inputGender"
+              type="text"
+              autocomplete="off"
+              placeholder="Click para seleccionar una opción" />
+
+            <datalist id="datalistGenderOptions">
+              <option value="Macho">Macho</option>
+              <option value="Hembra">Hembra</option>
+            </datalist>
+
+            <small
+              class="text-danger"
+              *ngIf="
+                !isGenderOption(gender?.value?.toString()) && gender?.touched
+              ">
+              El campo es obligatorio y debe ser una opción de la lista válida
+              (Macho/Hembra)
+            </small>
+          </div>
+
+          <div class="mb-3">
+            <label class="small mb-1" for="inputWeight">Peso (en kg)</label>
+            <input
+              class="form-control"
+              id="inputWeight"
+              formControlName="weight"
+              type="number"
+              placeholder="Peso" />
+
+            <small
+              class="text-danger"
+              *ngIf="weight?.errors?.required && weight?.touched">
+              El peso es obligatorio
+            </small>
+          </div>
+
+          <div class="mb-3">
+            <label class="small mb-1" for="inputSize">Tamaño</label>
+            <input
+              class="form-control"
+              formControlName="size"
+              list="datalistSizeOptions"
+              id="inputSize"
+              type="text"
+              autocomplete="off"
+              placeholder="Click para seleccionar una opción" />
+
+            <datalist id="datalistSizeOptions">
+              <option value="Mini">Mini</option>
+              <option value="Pequeño">Pequeño</option>
+              <option value="Mediano">Mediano</option>
+              <option value="Grande">Grande</option>
+              <option value="Gigante">Gigante</option>
+            </datalist>
+
+            <small
+              class="text-danger"
+              *ngIf="!isSizeOption(size?.value?.toString()) && size?.touched">
+              El campo es obligatorio y debe ser una opción de la lista válida
+              (Mini/Pequeño/Mediano/Grande/Gigante)
+            </small>
+          </div>
+
+          <div class="mb-3" *ngIf="addDog?.value">
+            <label class="small mb-1" for="inputDogRaze">Raza</label>
+
+            <input
+              class="form-control"
+              formControlName="raze"
+              list="datalistDogOptions"
+              id="inputDogRaze"
+              autocomplete="off"
+              placeholder="Buscar raza..." />
+
+            <datalist id="datalistDogOptions">
+              <option [value]="raze" *ngFor="let raze of dogRazes"></option>
+            </datalist>
+
+            <small
+              class="text-danger"
+              *ngIf="!isDogRaze(raze?.value) && raze?.touched">
+              La raza es obligatoria y debe ser una de la lista
+            </small>
+          </div>
+
+          <div class="mb-3" *ngIf="addCat?.value">
+            <label class="small mb-1" for="inputCatRaze">Raza</label>
+
+            <input
+              class="form-control"
+              formControlName="raze"
+              list="datalistCatOptions"
+              id="inputCatRaze"
+              autocomplete="off"
+              placeholder="Buscar raza..." />
+
+            <datalist id="datalistCatOptions">
+              <option [value]="raze" *ngFor="let raze of catRazes"></option>
+            </datalist>
+
+            <small
+              class="text-danger"
+              *ngIf="!isCatRaze(raze?.value) && raze?.touched">
+              La raza es obligatoria y debe ser una de la lista
+            </small>
+          </div>
+
+          <div class="mb-3">
+            <label class="small mb-1" for="inputNeutered">¿Castrado?</label>
+            <input
+              class="form-control"
+              id="inputNeutered"
+              formControlName="neutered"
+              list="datalistNeuteredOptions"
+              type="text"
+              placeholder="Click para seleccionar una opción"
+              autocomplete="off" />
+
+            <datalist id="datalistNeuteredOptions">
+              <option value="Si">Si</option>
+              <option value="No">No</option>
+            </datalist>
+
+            <small
+              class="text-danger"
+              *ngIf="
+                !isBooleanOption(neutered?.value?.toString()) &&
+                neutered?.touched
+              ">
+              El campo es obligatorio y debe ser una opción de la lista válida
+              (Si/No)
+            </small>
+          </div>
+
+          <div class="mb-3">
+            <label class="small mb-1" for="inputHealthy">¿Sano?</label>
+            <input
+              class="form-control"
+              formControlName="healthy"
+              list="datalistHealthyOptions"
+              id="inputHealthy"
+              type="text"
+              autocomplete="off"
+              placeholder="Click para seleccionar una opción" />
+
+            <datalist id="datalistHealthyOptions">
+              <option value="Si">Si</option>
+              <option value="No">No</option>
+            </datalist>
+
+            <small
+              class="text-danger"
+              *ngIf="
+                !isBooleanOption(healthy?.value?.toString()) && healthy?.touched
+              ">
+              El campo es obligatorio y debe ser una opción de la lista válida
+              (Si/No)
+            </small>
+          </div>
+
+          <div class="mb-3">
+            <label class="small mb-1" for="inputWormed">¿Desparasitado?</label>
+            <input
+              class="form-control"
+              formControlName="wormed"
+              list="datalistWormedOptions"
+              id="inputWormed"
+              type="text"
+              autocomplete="off"
+              placeholder="Click para seleccionar una opción" />
+
+            <datalist id="datalistWormedOptions">
+              <option value="Si">Si</option>
+              <option value="No">No</option>
+            </datalist>
+
+            <small
+              class="text-danger"
+              *ngIf="
+                !isBooleanOption(wormed?.value?.toString()) && wormed?.touched
+              ">
+              El campo es obligatorio y debe ser una opción de la lista válida
+              (Si/No)
+            </small>
+          </div>
+
+          <div class="mb-3">
+            <label class="small mb-1" for="inputVaccinated">¿Vacunado?</label>
+            <input
+              class="form-control"
+              id="inputVaccinated"
+              list="datalistVaccinatedOptions"
+              formControlName="vaccinated"
+              type="text"
+              autocomplete="off"
+              placeholder="Click para seleccionar una opción" />
+
+            <datalist id="datalistVaccinatedOptions">
+              <option value="Si">Si</option>
+              <option value="No">No</option>
+            </datalist>
+
+            <small
+              class="text-danger"
+              *ngIf="
+                !isBooleanOption(vaccinated?.value?.toString()) &&
+                vaccinated?.touched
+              ">
+              El campo es obligatorio y debe ser una opción de la lista válida
+              (Si/No)
+            </small>
+          </div>
+
+          <div class="mb-3">
+            <label class="small mb-1" for="inputBirthDate"
+              >Fecha de nacimiento</label
+            >
+            <input
+              class="form-control"
+              id="inputBirthDate"
+              formControlName="birthDate"
+              type="date"
+              placeholder="Fecha de nacimiento" />
+          </div>
+
+          <div class="mb-3">
+            <label class="small mb-1" for="inputActivity"
+              >Actividad del animal</label
+            >
+            <input
+              class="form-control"
+              formControlName="activityLevel"
+              list="datalistActivityOptions"
+              id="inputActivity"
+              type="text"
+              autocomplete="off"
+              placeholder="Click para seleccionar una opción" />
+
+            <datalist id="datalistActivityOptions">
+              <option value="Baja">Baja</option>
+              <option value="Media">Media</option>
+              <option value="Alta">Alta</option>
+            </datalist>
+
+            <small
+              class="text-danger"
+              *ngIf="
+                !isActivityLevelOption(activityLevel?.value?.toString()) &&
+                activityLevel?.touched
+              ">
+              El campo es obligatorio y debe ser una opción de la lista válida
+              (Media/Baja/Alta)
+            </small>
+          </div>
+
+          <div class="mb-3">
+            <label class="small mb-1" for="inputMicrochip">¿Microchip?</label>
+            <input
+              class="form-control"
+              id="inputMicrochip"
+              list="datalistMicrochipOptions"
+              autocomplete="off"
+              formControlName="microchip"
+              type="text"
+              placeholder="Click para seleccionar una opción" />
+
+            <datalist id="datalistMicrochipOptions">
+              <option value="Si">Si</option>
+              <option value="No">No</option>
+            </datalist>
+
+            <small
+              class="text-danger"
+              *ngIf="
+                !isBooleanOption(microchip?.value?.toString()) &&
+                microchip?.touched
+              ">
+              El campo es obligatorio y debe ser una opción de la lista válida
+              (Si/No)
+            </small>
+          </div>
+
+          <div class="mb-3">
+            <label class="small mb-1" for="inputUrgency"
+              >¿Adopción urgente?</label
+            >
+            <input
+              class="form-control"
+              id="inputUrgency"
+              formControlName="isUrgent"
+              list="datalistUrgentOptions"
+              autocomplete="off"
+              type="text"
+              placeholder="Click para seleccionar una opción" />
+
+            <datalist id="datalistUrgentOptions">
+              <option value="Si">Si</option>
+              <option value="No">No</option>
+            </datalist>
+
+            <small
+              class="text-danger"
+              *ngIf="
+                !isBooleanOption(isUrgent?.value?.toString()) &&
+                isUrgent?.touched
+              ">
+              El campo es obligatorio y debe ser una opción de la lista válida
+              (Si/No)
+            </small>
+          </div>
+
+          <div class="mb-3">
+            <label class="small mb-1" for="inputDescription">Descripción</label>
+            <input
+              class="form-control"
+              id="inputDescription"
+              formControlName="description"
+              type="text"
+              placeholder="Descripción" />
+
+            <small
+              class="text-danger"
+              *ngIf="description?.errors?.required && description?.touched">
+              La descripción es obligatoria
+            </small>
+          </div>
+
+          <small class="text-primary">
+            Una vez se haya creado el animal, podrás añadirle fotos en el
+            apartado de edición.
+          </small>
+          <br />
+          <small class="text-primary">
+            Se redireccionará a la página de edición del animal automáticamente.
+          </small>
+
+          <div class="col-md-6">
+            <button
+              *ngIf="addDog?.value"
+              class="btn btn-primary mt-3"
+              type="button"
+              [disabled]="newAnimalForm.invalid"
+              (click)="createDog()">
+              Añadir perro
+            </button>
+            <button
+              *ngIf="addCat?.value"
+              class="btn btn-primary mt-3"
+              type="button"
+              [disabled]="newAnimalForm.invalid"
+              (click)="createCat()">
+              Añadir gato
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

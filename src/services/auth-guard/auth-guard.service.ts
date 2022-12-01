@@ -17,9 +17,8 @@ export class AuthGuardService implements CanActivate {
     if (this.authService.loggedIn()) {
       return true;
     } else {
-      this.authService.logout();
+      this.authService.logout(true);
       this.router.navigate(['/login']);
-      this.toastr.info('Su sesión ha expirado. Vuelva a iniciar sesión');
       return false;
     }
   }

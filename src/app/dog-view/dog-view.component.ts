@@ -1,24 +1,25 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UserService } from '../../services/user/user.service';
-import { ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+import { UserService } from '../../services/user/user.service';
 import { AnimalService } from '../../services/animals/animal.service';
-import { first, shareReplay } from 'rxjs';
-import { Cat, Dog } from '../interfaces/interfaces';
 import { ToastrService } from 'ngx-toastr';
 import { NgbModal, NgbModalConfig } from '@ng-bootstrap/ng-bootstrap';
+import { Dog } from '../interfaces/interfaces';
+import { first, shareReplay } from 'rxjs';
+import { MatCardModule } from '@angular/material/card';
+import { ReactiveFormsModule } from '@angular/forms';
 import { addAnimal } from '../../utils';
 
 @Component({
-  selector: 'app-animals',
+  selector: 'app-dog-view',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
-  templateUrl: './animals.component.html',
-  styleUrls: ['./animals.component.scss'],
+  imports: [CommonModule, RouterModule, MatCardModule, ReactiveFormsModule],
+  templateUrl: './dog-view.component.html',
+  styleUrls: ['./dog-view.component.scss'],
   providers: [NgbModalConfig, NgbModal],
 })
-export class AnimalsComponent implements OnInit {
+export class DogViewComponent implements OnInit {
   constructor(
     public userService: UserService,
     public animalService: AnimalService,
@@ -35,19 +36,11 @@ export class AnimalsComponent implements OnInit {
 
   dogs$ = this.userService.getDogs();
   dogs: Dog[] = [];
-  cats$ = this.userService.getCats();
-  cats: Cat[] = [];
 
   ngOnInit(): void {
     this.dogs$.pipe(first()).subscribe(data => {
       data.forEach(dog => {
         this.dogs.push(dog);
-      });
-    }, shareReplay());
-
-    this.cats$.pipe(first()).subscribe(data => {
-      data.forEach(cat => {
-        this.cats.push(cat);
       });
     }, shareReplay());
   }
@@ -56,12 +49,12 @@ export class AnimalsComponent implements OnInit {
     this.router.navigate(['/edit/dog/' + id]);
   }
 
-  editCat(id: string | undefined) {
-    this.router.navigate(['/edit/cat/' + id]);
-  }
-
   newAnimal(isDog: boolean) {
     addAnimal(isDog, this.router);
+  }
+
+  goToAll() {
+    this.router.navigate(['/animals']);
   }
 
   deleteDog(id: string | undefined) {
@@ -86,10 +79,6 @@ export class AnimalsComponent implements OnInit {
         console.log(error);
       }
     );
-  }
-
-  goToDogs() {
-    this.router.navigate(['/dogs']);
   }
 
   goToCats() {

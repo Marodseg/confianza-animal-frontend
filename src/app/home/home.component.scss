@@ -1,0 +1,8 @@
+.nav-link:hover,
+.navbar-brand:hover {
+  transition: 0.2s all ease-in-out;
+  background-color: #007bff;
+  border-color: #007bff;
+  border-radius: 10px;
+  transform: scale(1.1);
+}

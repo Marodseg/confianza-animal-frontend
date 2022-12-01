@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { UserService } from '../../services/user/user.service';
@@ -12,14 +12,10 @@ import { AuthService } from '../../services/auth/auth.service';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent {
+  organization$ = this.userService.getUserProfile();
+
   constructor(
     public userService: UserService,
     public authService: AuthService
   ) {}
-
-  getUser() {
-    return this.userService.getUserProfile().subscribe(res => {
-      console.log(res);
-    });
-  }
 }

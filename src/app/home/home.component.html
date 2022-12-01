@@ -8,19 +8,25 @@
       data-bs-target="#navbarTitle">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <a href="" class="navbar-brand flex-grow-1">Confianza Animal</a>
+    <a href="" class="navbar-brand flex-grow-1">{{
+      (organization$ | async)?.name
+    }}</a>
     <div
       class="navbar-collapse collapse flex-grow-1 justify-content-center w-100"
       id="navbarTitle">
       <ul class="navbar-nav mx-auto" style="margin-right: 10% !important">
         <li class="nav-item" style="margin-left: 30px !important">
-          <a class="nav-link" [routerLink]="'/profile'">Perfil</a>
+          <a class="nav-link text-white" [routerLink]="'/profile'">Perfil</a>
         </li>
         <li class="nav-item" style="margin-left: 30px !important">
-          <a class="nav-link" [routerLink]="'/animals'">Mis animales</a>
+          <a class="nav-link text-white" [routerLink]="'/animals'"
+            >Mis animales</a
+          >
         </li>
         <li class="nav-item" style="margin-left: 30px !important">
-          <a class="nav-link" [routerLink]="'/petitions'">Peticiones</a>
+          <a class="nav-link text-white" [routerLink]="'/petitions'"
+            >Peticiones</a
+          >
         </li>
       </ul>
       <ul class="navbar-nav ms-auto flex-nowrap">

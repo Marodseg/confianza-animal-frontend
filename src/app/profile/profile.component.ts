@@ -5,42 +5,110 @@ import { UserService } from '../../services/user/user.service';
 import { Organization } from '../interfaces/interfaces';
 import { first, shareReplay } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
-
-class ImageSnippet {
-  constructor(public src: string, public file: File) {}
-}
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { FilterService } from '../../services/filter/filter.service';
+import { processFile } from 'src/utils';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, ReactiveFormsModule],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss'],
 })
-export class ProfileComponent {
+export class ProfileComponent implements OnInit {
   organization$ = this.userService.getUserProfile();
-  selectedFile: ImageSnippet | undefined;
 
-  constructor(public userService: UserService, public toastr: ToastrService) {}
+  initialName = '';
+  initialPhone = '';
+  initialZone = '';
 
-  processFile(imageInput: any) {
-    const file: File = imageInput.files[0];
-    const reader = new FileReader();
+  constructor(
+    public userService: UserService,
+    public toastr: ToastrService,
+    public filterService: FilterService
+  ) {}
 
-    reader.addEventListener('load', (event: any) => {
-      this.selectedFile = new ImageSnippet(event.target.result, file);
+  provinces$ = this.filterService.getProvinces();
+  provinces: [string] = [''];
 
-      this.userService.uploadPhoto(this.selectedFile.file).subscribe(
-        res => {
-          this.toastr.success('Imagen subida con éxito', '', { timeOut: 4000 });
-          window.location.reload();
-        },
-        err => {
-          this.toastr.error(err.error.detail, '', { timeOut: 4000 });
-        }
-      );
+  public profileForm = new FormGroup({
+    phone: new FormControl('', {
+      validators: Validators.required,
+      nonNullable: true,
+    }),
+    zone: new FormControl('', {
+      validators: Validators.required,
+      nonNullable: true,
+    }),
+  });
+
+  ngOnInit() {
+    this.provinces$.pipe(first()).subscribe(data => {
+      data.forEach(province => {
+        this.provinces.push(province);
+      });
+    }, shareReplay());
+
+    this.organization$.subscribe((organization: Organization) => {
+      this.initialPhone = organization.phone;
+      this.initialZone = organization.zone;
+      this.profileForm.patchValue({
+        phone: organization.phone,
+        zone: organization.zone,
+      });
     });
+  }
 
-    reader.readAsDataURL(file);
+  get phone() {
+    return this.profileForm.get('phone');
+  }
+
+  get zone() {
+    return this.profileForm.get('zone');
+  }
+
+  public updateProfile() {
+    let userParams = {};
+    if (this.profileForm.value.phone !== this.initialPhone) {
+      userParams = {
+        ...userParams,
+        phone: this.profileForm.value.phone,
+      };
+    }
+    if (this.profileForm.value.zone !== this.initialZone) {
+      userParams = {
+        ...userParams,
+        zone: this.profileForm.value.zone,
+      };
+    }
+
+    this.userService.updateUser(userParams).subscribe(
+      res => {
+        this.toastr.success('Perfil actualizado con éxito', '', {
+          timeOut: 4000,
+        });
+      },
+      err => {
+        this.toastr.error(err.error.detail, '', { timeOut: 4000 });
+      }
+    );
+  }
+
+  isProvince(province?: string): boolean {
+    if (province) {
+      return this.provinces.includes(province);
+    }
+    return false;
+  }
+
+  processImage(imageInput: any) {
+    processFile(imageInput, this.userService, this.toastr);
+    this.toastr.success('Imagen subida con éxito', '', { timeOut: 4000 });
   }
 }
