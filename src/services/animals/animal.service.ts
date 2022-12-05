@@ -365,6 +365,7 @@ export class AnimalService {
           : dog.size == 'Grande'
           ? 'big'
           : 'very big',
+      zone: dog.zone,
       neutered: dog.neutered == 'Si',
       description: dog.description,
       healthy: dog.healthy == 'Si',
@@ -410,6 +411,7 @@ export class AnimalService {
           : cat.size == 'Grande'
           ? 'big'
           : 'very big',
+      zone: cat.zone,
       neutered: cat.neutered == 'Si',
       description: cat.description,
       healthy: cat.healthy == 'Si',
