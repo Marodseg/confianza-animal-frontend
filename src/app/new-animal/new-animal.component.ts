@@ -10,6 +10,7 @@ import {
   isActivityLevelOption,
   isBooleanOption,
   isGenderOption,
+  isProvince,
   isSizeOption,
 } from 'src/utils';
 import { Router, RouterModule } from '@angular/router';
@@ -53,6 +54,10 @@ export class NewAnimalComponent implements OnInit {
       nonNullable: true,
     }),
     raze: new FormControl('', {
+      validators: Validators.required,
+      nonNullable: true,
+    }),
+    province: new FormControl('', {
       validators: Validators.required,
       nonNullable: true,
     }),
@@ -101,10 +106,13 @@ export class NewAnimalComponent implements OnInit {
   ) {}
 
   dogRazes$ = this.filterService.getDogRazes();
-  dogRazes: [string] = [''];
+  dogRazes: string[] = [''];
 
   catRazes$ = this.filterService.getCatRazes();
-  catRazes: [string] = [''];
+  catRazes: string[] = [''];
+
+  provinces$ = this.filterService.getProvinces();
+  provinces: string[] = [''];
 
   ngOnInit(): void {
     this.dogRazes$.pipe(first()).subscribe(data => {
@@ -116,6 +124,12 @@ export class NewAnimalComponent implements OnInit {
     this.catRazes$.pipe(first()).subscribe(data => {
       data.forEach(province => {
         this.catRazes.push(province);
+      });
+    }, shareReplay());
+
+    this.provinces$.pipe(first()).subscribe(data => {
+      data.forEach(province => {
+        this.provinces.push(province);
       });
     }, shareReplay());
 
@@ -195,6 +209,10 @@ export class NewAnimalComponent implements OnInit {
     return this.newAnimalForm.get('raze');
   }
 
+  get province() {
+    return this.newAnimalForm.get('province');
+  }
+
   get name() {
     return this.newAnimalForm.get('name');
   }
@@ -227,6 +245,7 @@ export class NewAnimalComponent implements OnInit {
       weight: this.newAnimalForm.get('weight')?.value,
       size: this.newAnimalForm.get('size')?.value,
       raze: this.newAnimalForm.get('raze')?.value,
+      zone: this.newAnimalForm.get('province')?.value,
       description: this.newAnimalForm.get('description')?.value,
       healthy: this.newAnimalForm.get('healthy')?.value,
       wormed: this.newAnimalForm.get('wormed')?.value,
@@ -258,6 +277,7 @@ export class NewAnimalComponent implements OnInit {
       weight: this.newAnimalForm.get('weight')?.value,
       size: this.newAnimalForm.get('size')?.value,
       raze: this.newAnimalForm.get('raze')?.value,
+      zone: this.newAnimalForm.get('province')?.value,
       description: this.newAnimalForm.get('description')?.value,
       healthy: this.newAnimalForm.get('healthy')?.value,
       wormed: this.newAnimalForm.get('wormed')?.value,
@@ -293,5 +313,9 @@ export class NewAnimalComponent implements OnInit {
       return this.catRazes.includes(raze);
     }
     return false;
+  }
+
+  checkProvince(province?: string): boolean {
+    return isProvince(this.provinces, province);
   }
 }

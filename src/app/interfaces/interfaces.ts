@@ -29,6 +29,7 @@ export interface Animal {
   photos: string[];
   weight: number;
   size: string;
+  zone: string;
   neutered: boolean | string;
   description: string;
   healthy: boolean | string;
@@ -72,6 +73,7 @@ export interface DogCreate {
   gender: string;
   weight: number;
   size: string;
+  zone: string;
   neutered: boolean | string;
   description: string;
   healthy: boolean | string;
@@ -91,6 +93,7 @@ export interface DogUpdateIn {
   photos?: string[];
   weight?: number;
   size?: string;
+  zone?: string;
   neutered?: boolean;
   description?: string;
   healthy?: boolean;

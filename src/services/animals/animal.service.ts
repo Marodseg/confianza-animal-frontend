@@ -125,6 +125,12 @@ export class AnimalService {
         size: dog.size,
       };
     }
+    if (dog.zone) {
+      body = {
+        ...body,
+        zone: dog.zone,
+      };
+    }
     if (dog.raze) {
       body = {
         ...body,
@@ -228,6 +234,12 @@ export class AnimalService {
       body = {
         ...body,
         size: cat.size,
+      };
+    }
+    if (cat.zone) {
+      body = {
+        ...body,
+        zone: cat.zone,
       };
     }
     if (cat.raze) {

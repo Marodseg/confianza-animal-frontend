@@ -18,7 +18,10 @@ import {
   processCatFiles,
   isActivityLevelOption,
   isGenderOption,
+  isProvince,
 } from 'src/utils';
+import { FilterService } from '../../services/filter/filter.service';
+import { first, shareReplay } from 'rxjs';
 
 @Component({
   selector: 'app-cat-profile',
@@ -30,12 +33,15 @@ import {
 })
 export class CatProfileComponent implements OnInit {
   cat$ = this.animalService.getCat(this.route.snapshot.params.id);
+  provinces$ = this.filterService.getProvinces();
+  provinces: string[] = [];
 
   initialName = '';
   initialAge = 0;
   initialGender = '';
   initialWeight = 0;
   initialSize = '';
+  initialZone = '';
   initialNeutered = '';
   initialDescription = '';
   initialHealthy = '';
@@ -52,6 +58,10 @@ export class CatProfileComponent implements OnInit {
     gender: new FormControl('', Validators.required),
     weight: new FormControl(0, Validators.required),
     size: new FormControl('', Validators.required),
+    zone: new FormControl('', {
+      validators: Validators.required,
+      nonNullable: true,
+    }),
     neutered: new FormControl('', Validators.required),
     description: new FormControl('', Validators.required),
     healthy: new FormControl('', Validators.required),
@@ -69,7 +79,8 @@ export class CatProfileComponent implements OnInit {
     public route: ActivatedRoute,
     public userService: UserService,
     public toastr: ToastrService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private filterService: FilterService
   ) {}
 
   open(content: any) {
@@ -110,17 +121,28 @@ export class CatProfileComponent implements OnInit {
     return this.catForm.get('size');
   }
 
+  get province() {
+    return this.catForm.get('zone');
+  }
+
   get activityLevel() {
     return this.catForm.get('activityLevel');
   }
 
   ngOnInit(): void {
+    this.provinces$.pipe(first()).subscribe(data => {
+      data.forEach(province => {
+        this.provinces.push(province);
+      });
+    }, shareReplay());
+
     this.cat$.subscribe(cat => {
       this.initialName = cat.name;
       this.initialAge = cat.age;
       this.initialGender = cat.gender;
       this.initialWeight = cat.weight;
       this.initialSize = cat.size;
+      this.initialZone = cat.zone;
       this.initialNeutered = cat.neutered.toString();
       this.initialDescription = cat.description;
       this.initialHealthy = cat.healthy.toString();
@@ -137,6 +159,7 @@ export class CatProfileComponent implements OnInit {
         gender: cat.gender,
         weight: cat.weight,
         size: cat.size,
+        zone: cat.zone,
         neutered: cat.neutered.toString(),
         description: cat.description,
         healthy: cat.healthy.toString(),
@@ -193,6 +216,10 @@ export class CatProfileComponent implements OnInit {
             ? 'big'
             : 'very big',
       };
+    }
+
+    if (this.catForm.value.zone !== this.initialZone) {
+      catParams = { ...catParams, zone: this.catForm.value.zone };
     }
 
     if (this.catForm.value.neutered !== this.initialNeutered) {
@@ -303,5 +330,9 @@ export class CatProfileComponent implements OnInit {
 
   isGenderOption(option?: string): boolean {
     return isGenderOption(option);
+  }
+
+  checkProvince(province?: string): boolean {
+    return isProvince(this.provinces, province);
   }
 }

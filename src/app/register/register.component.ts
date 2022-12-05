@@ -12,6 +12,7 @@ import { ToastrService } from 'ngx-toastr';
 import { UserService } from '../../services/user/user.service';
 import { FilterService } from '../../services/filter/filter.service';
 import { first, shareReplay } from 'rxjs';
+import { isProvince } from '../../utils';
 
 @Component({
   standalone: true,
@@ -115,10 +116,7 @@ export class RegisterComponent implements OnInit {
     );
   }
 
-  isProvince(province?: string): boolean {
-    if (province) {
-      return this.provinces.includes(province);
-    }
-    return false;
+  checkProvince(province?: string): boolean {
+    return isProvince(this.provinces, province);
   }
 }

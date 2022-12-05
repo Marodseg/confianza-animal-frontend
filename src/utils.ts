@@ -117,3 +117,10 @@ export function isGenderOption(option?: string): boolean {
 export function addAnimal(isDog: boolean, router: Router) {
   router.navigate(['/new/animal'], { state: { isDog: isDog } });
 }
+
+export function isProvince(provinces: string[], province?: string): boolean {
+  if (province) {
+    return provinces.includes(province);
+  }
+  return false;
+}

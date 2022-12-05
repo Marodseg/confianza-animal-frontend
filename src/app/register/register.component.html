@@ -90,7 +90,7 @@
                       <small
                         class="text-danger"
                         *ngIf="
-                          !isProvince(province?.value) && province?.touched
+                          !checkProvince(province?.value) && province?.touched
                         ">
                         La provincia es obligatoria y debe ser una de la lista
                       </small>

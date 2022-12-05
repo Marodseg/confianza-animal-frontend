@@ -14,11 +14,14 @@ import {
   isActivityLevelOption,
   isBooleanOption,
   isGenderOption,
+  isProvince,
   isSizeOption,
   processDogFiles,
 } from '../../utils';
 import * as moment from 'moment';
 import { NgbModal, NgbModalConfig } from '@ng-bootstrap/ng-bootstrap';
+import { FilterService } from '../../services/filter/filter.service';
+import { first, shareReplay } from 'rxjs';
 
 @Component({
   selector: 'app-dog-profile',
@@ -32,11 +35,15 @@ export class DogProfileComponent implements OnInit {
   dog$ = this.animalService.getDog(this.route.snapshot.params.id);
   dogPhotos: string[] = [];
 
+  provinces$ = this.filterService.getProvinces();
+  provinces: string[] = [''];
+
   initialName = '';
   initialAge = 0;
   initialGender = '';
   initialWeight = 0;
   initialSize = '';
+  initialZone = '';
   initialNeutered = '';
   initialDescription = '';
   initialHealthy = '';
@@ -53,6 +60,10 @@ export class DogProfileComponent implements OnInit {
     gender: new FormControl('', Validators.required),
     weight: new FormControl(0, Validators.required),
     size: new FormControl('', Validators.required),
+    zone: new FormControl('', {
+      validators: Validators.required,
+      nonNullable: true,
+    }),
     neutered: new FormControl('', Validators.required),
     description: new FormControl('', Validators.required),
     healthy: new FormControl('', Validators.required),
@@ -70,7 +81,8 @@ export class DogProfileComponent implements OnInit {
     public route: ActivatedRoute,
     public userService: UserService,
     public toastr: ToastrService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private filterService: FilterService
   ) {}
 
   open(content: any) {
@@ -111,11 +123,21 @@ export class DogProfileComponent implements OnInit {
     return this.dogForm.get('size');
   }
 
+  get province() {
+    return this.dogForm.get('zone');
+  }
+
   get activityLevel() {
     return this.dogForm.get('activityLevel');
   }
 
   ngOnInit(): void {
+    this.provinces$.pipe(first()).subscribe(data => {
+      data.forEach(province => {
+        this.provinces.push(province);
+      });
+    }, shareReplay());
+
     this.dog$.subscribe(dog => {
       this.dogPhotos = dog.photos;
 
@@ -124,6 +146,7 @@ export class DogProfileComponent implements OnInit {
       this.initialGender = dog.gender;
       this.initialWeight = dog.weight;
       this.initialSize = dog.size;
+      this.initialZone = dog.zone;
       this.initialNeutered = dog.neutered.toString();
       this.initialDescription = dog.description;
       this.initialHealthy = dog.healthy.toString();
@@ -140,6 +163,7 @@ export class DogProfileComponent implements OnInit {
         gender: dog.gender,
         weight: dog.weight,
         size: dog.size,
+        zone: dog.zone,
         neutered: dog.neutered.toString(),
         description: dog.description,
         healthy: dog.healthy.toString(),
@@ -196,6 +220,10 @@ export class DogProfileComponent implements OnInit {
             ? 'big'
             : 'very big',
       };
+    }
+
+    if (this.dogForm.value.zone !== this.initialZone) {
+      dogParams = { ...dogParams, zone: this.dogForm.value.zone };
     }
 
     if (this.dogForm.value.neutered !== this.initialNeutered) {
@@ -306,5 +334,9 @@ export class DogProfileComponent implements OnInit {
 
   isGenderOption(option?: string): boolean {
     return isGenderOption(option);
+  }
+
+  checkProvince(province?: string): boolean {
+    return isProvince(this.provinces, province);
   }
 }

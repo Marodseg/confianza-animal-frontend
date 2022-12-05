@@ -158,6 +158,28 @@
             </div>
 
             <div class="mb-3">
+              <label class="small mb-1" for="inputDogProvince">Provincia</label>
+              <input
+                class="form-control"
+                formControlName="zone"
+                list="datalistOptions"
+                id="inputDogProvince"
+                placeholder="Buscar provincia..." />
+
+              <datalist id="datalistOptions">
+                <option
+                  [value]="province"
+                  *ngFor="let province of provinces"></option>
+              </datalist>
+
+              <small
+                class="text-danger"
+                *ngIf="!checkProvince(province?.value) && province?.touched">
+                La provincia es obligatoria y debe ser una de la lista
+              </small>
+            </div>
+
+            <div class="mb-3">
               <label class="small mb-1" for="inputNeutered">¿Castrado?</label>
               <input
                 class="form-control"
