@@ -156,28 +156,6 @@
             </small>
           </div>
 
-          <div class="mb-3" *ngIf="addDog?.value">
-            <label class="small mb-1" for="inputDogProvince">Provincia</label>
-            <input
-              class="form-control"
-              formControlName="province"
-              list="datalistOptions"
-              id="inputDogProvince"
-              placeholder="Buscar provincia..." />
-
-            <datalist id="datalistOptions">
-              <option
-                [value]="province"
-                *ngFor="let province of provinces"></option>
-            </datalist>
-
-            <small
-              class="text-danger"
-              *ngIf="!checkProvince(province?.value) && province?.touched">
-              La provincia es obligatoria y debe ser una de la lista
-            </small>
-          </div>
-
           <div class="mb-3" *ngIf="addCat?.value">
             <label class="small mb-1" for="inputCatRaze">Raza</label>
 
@@ -197,6 +175,30 @@
               class="text-danger"
               *ngIf="!isCatRaze(raze?.value) && raze?.touched">
               La raza es obligatoria y debe ser una de la lista
+            </small>
+          </div>
+
+          <div class="mb-3">
+            <label class="small mb-1" for="inputAnimalProvince"
+              >Provincia</label
+            >
+            <input
+              class="form-control"
+              formControlName="province"
+              list="datalistOptions"
+              id="inputAnimalProvince"
+              placeholder="Buscar provincia..." />
+
+            <datalist id="datalistOptions">
+              <option
+                [value]="province"
+                *ngFor="let province of provinces"></option>
+            </datalist>
+
+            <small
+              class="text-danger"
+              *ngIf="!checkProvince(province?.value) && province?.touched">
+              La provincia es obligatoria y debe ser una de la lista
             </small>
           </div>
 
