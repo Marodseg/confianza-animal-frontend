@@ -124,3 +124,17 @@ export function isProvince(provinces: string[], province?: string): boolean {
   }
   return false;
 }
+
+export function isDogRaze(dogRazes: string[], raze?: string): boolean {
+  if (raze) {
+    return dogRazes.includes(raze);
+  }
+  return false;
+}
+
+export function isCatRaze(catRazes: string[], raze?: string): boolean {
+  if (raze) {
+    return catRazes.includes(raze);
+  }
+  return false;
+}

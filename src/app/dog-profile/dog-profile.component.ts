@@ -13,6 +13,7 @@ import { UserService } from '../../services/user/user.service';
 import {
   isActivityLevelOption,
   isBooleanOption,
+  isDogRaze,
   isGenderOption,
   isProvince,
   isSizeOption,
@@ -38,11 +39,15 @@ export class DogProfileComponent implements OnInit {
   provinces$ = this.filterService.getProvinces();
   provinces: string[] = [''];
 
+  dogRazes$ = this.filterService.getDogRazes();
+  razes: string[] = [''];
+
   initialName = '';
   initialAge = 0;
   initialGender = '';
   initialWeight = 0;
   initialSize = '';
+  initialRaze = '';
   initialZone = '';
   initialNeutered = '';
   initialDescription = '';
@@ -60,6 +65,7 @@ export class DogProfileComponent implements OnInit {
     gender: new FormControl('', Validators.required),
     weight: new FormControl(0, Validators.required),
     size: new FormControl('', Validators.required),
+    raze: new FormControl('', { nonNullable: true }),
     zone: new FormControl('', {
       validators: Validators.required,
       nonNullable: true,
@@ -123,6 +129,10 @@ export class DogProfileComponent implements OnInit {
     return this.dogForm.get('size');
   }
 
+  get raze() {
+    return this.dogForm.get('raze');
+  }
+
   get province() {
     return this.dogForm.get('zone');
   }
@@ -138,6 +148,12 @@ export class DogProfileComponent implements OnInit {
       });
     }, shareReplay());
 
+    this.dogRazes$.pipe(first()).subscribe(data => {
+      data.forEach(raze => {
+        this.razes.push(raze);
+      });
+    }, shareReplay());
+
     this.dog$.subscribe(dog => {
       this.dogPhotos = dog.photos;
 
@@ -146,6 +162,7 @@ export class DogProfileComponent implements OnInit {
       this.initialGender = dog.gender;
       this.initialWeight = dog.weight;
       this.initialSize = dog.size;
+      this.initialRaze = dog.raze;
       this.initialZone = dog.zone;
       this.initialNeutered = dog.neutered.toString();
       this.initialDescription = dog.description;
@@ -163,6 +180,7 @@ export class DogProfileComponent implements OnInit {
         gender: dog.gender,
         weight: dog.weight,
         size: dog.size,
+        raze: dog.raze,
         zone: dog.zone,
         neutered: dog.neutered.toString(),
         description: dog.description,
@@ -220,6 +238,10 @@ export class DogProfileComponent implements OnInit {
             ? 'big'
             : 'very big',
       };
+    }
+
+    if (this.dogForm.value.raze !== this.initialRaze) {
+      dogParams = { ...dogParams, raze: this.dogForm.value.raze };
     }
 
     if (this.dogForm.value.zone !== this.initialZone) {
@@ -338,5 +360,9 @@ export class DogProfileComponent implements OnInit {
 
   checkProvince(province?: string): boolean {
     return isProvince(this.provinces, province);
+  }
+
+  checkDogRaze(raze?: string): boolean {
+    return isDogRaze(this.razes, raze);
   }
 }

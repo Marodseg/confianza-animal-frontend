@@ -22,8 +22,8 @@ export class FilterService {
     return this.http.get<string[]>(environment.dogRazes).pipe(
       map(data => {
         data.sort();
-        data.splice(data.indexOf('other'), 1);
-        data.push('other');
+        data.splice(data.indexOf('Desconocida'), 1);
+        data.push('Desconocida');
         return data;
       })
     );
@@ -33,8 +33,8 @@ export class FilterService {
     return this.http.get<string[]>(environment.catRazes).pipe(
       map(data => {
         data.sort();
-        data.splice(data.indexOf('other'), 1);
-        data.push('other');
+        data.splice(data.indexOf('Desconocida'), 1);
+        data.push('Desconocida');
         return data;
       })
     );

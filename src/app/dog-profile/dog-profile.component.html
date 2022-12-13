@@ -158,6 +158,27 @@
             </div>
 
             <div class="mb-3">
+              <label class="small mb-1" for="inputDogRaze">Raza</label>
+              <input
+                class="form-control"
+                formControlName="raze"
+                list="datalistRazeOptions"
+                autocomplete="off"
+                id="inputDogRaze"
+                placeholder="Buscar raza..." />
+
+              <datalist id="datalistRazeOptions">
+                <option [value]="raze" *ngFor="let raze of razes"></option>
+              </datalist>
+
+              <small
+                class="text-danger"
+                *ngIf="!checkDogRaze(raze?.value) && raze?.touched">
+                La raza es obligatoria y debe ser una de la lista
+              </small>
+            </div>
+
+            <div class="mb-3">
               <label class="small mb-1" for="inputDogProvince">Provincia</label>
               <input
                 class="form-control"

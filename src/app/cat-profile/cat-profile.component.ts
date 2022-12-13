@@ -19,6 +19,7 @@ import {
   isActivityLevelOption,
   isGenderOption,
   isProvince,
+  isCatRaze,
 } from 'src/utils';
 import { FilterService } from '../../services/filter/filter.service';
 import { first, shareReplay } from 'rxjs';
@@ -35,12 +36,15 @@ export class CatProfileComponent implements OnInit {
   cat$ = this.animalService.getCat(this.route.snapshot.params.id);
   provinces$ = this.filterService.getProvinces();
   provinces: string[] = [];
+  catRazes$ = this.filterService.getCatRazes();
+  razes: string[] = [];
 
   initialName = '';
   initialAge = 0;
   initialGender = '';
   initialWeight = 0;
   initialSize = '';
+  initialRaze = '';
   initialZone = '';
   initialNeutered = '';
   initialDescription = '';
@@ -58,6 +62,7 @@ export class CatProfileComponent implements OnInit {
     gender: new FormControl('', Validators.required),
     weight: new FormControl(0, Validators.required),
     size: new FormControl('', Validators.required),
+    raze: new FormControl('', { nonNullable: true }),
     zone: new FormControl('', {
       validators: Validators.required,
       nonNullable: true,
@@ -121,6 +126,10 @@ export class CatProfileComponent implements OnInit {
     return this.catForm.get('size');
   }
 
+  get raze() {
+    return this.catForm.get('raze');
+  }
+
   get province() {
     return this.catForm.get('zone');
   }
@@ -136,12 +145,19 @@ export class CatProfileComponent implements OnInit {
       });
     }, shareReplay());
 
+    this.catRazes$.pipe(first()).subscribe(data => {
+      data.forEach(raze => {
+        this.razes.push(raze);
+      });
+    }, shareReplay());
+
     this.cat$.subscribe(cat => {
       this.initialName = cat.name;
       this.initialAge = cat.age;
       this.initialGender = cat.gender;
       this.initialWeight = cat.weight;
       this.initialSize = cat.size;
+      this.initialRaze = cat.raze;
       this.initialZone = cat.zone;
       this.initialNeutered = cat.neutered.toString();
       this.initialDescription = cat.description;
@@ -159,6 +175,7 @@ export class CatProfileComponent implements OnInit {
         gender: cat.gender,
         weight: cat.weight,
         size: cat.size,
+        raze: cat.raze,
         zone: cat.zone,
         neutered: cat.neutered.toString(),
         description: cat.description,
@@ -216,6 +233,10 @@ export class CatProfileComponent implements OnInit {
             ? 'big'
             : 'very big',
       };
+    }
+
+    if (this.catForm.value.raze !== this.initialRaze) {
+      catParams = { ...catParams, raze: this.catForm.value.raze };
     }
 
     if (this.catForm.value.zone !== this.initialZone) {
@@ -334,5 +355,9 @@ export class CatProfileComponent implements OnInit {
 
   checkProvince(province?: string): boolean {
     return isProvince(this.provinces, province);
+  }
+
+  checkCatRaze(raze?: string): boolean {
+    return isCatRaze(this.razes, raze);
   }
 }
