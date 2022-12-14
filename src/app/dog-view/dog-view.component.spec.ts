@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DogViewComponent } from './dog-view.component';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ToastrModule } from 'ngx-toastr';
 
 describe('DogViewComponent', () => {
   let component: DogViewComponent;
@@ -8,7 +10,11 @@ describe('DogViewComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DogViewComponent],
+      imports: [
+        DogViewComponent,
+        HttpClientTestingModule,
+        ToastrModule.forRoot(),
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(DogViewComponent);

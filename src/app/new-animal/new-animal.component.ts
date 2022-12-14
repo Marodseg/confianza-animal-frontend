@@ -25,6 +25,7 @@ import { ToastrService } from 'ngx-toastr';
   imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './new-animal.component.html',
   styleUrls: ['./new-animal.component.scss'],
+  providers: [ToastrService],
 })
 export class NewAnimalComponent implements OnInit {
   addAnimalForm = new FormGroup({

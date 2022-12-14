@@ -14,6 +14,7 @@ import { ToastrService } from 'ngx-toastr';
   selector: 'app-restore-password',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  providers: [ToastrService],
   templateUrl: './restore-password.component.html',
   styleUrls: ['./restore-password.component.scss'],
 })

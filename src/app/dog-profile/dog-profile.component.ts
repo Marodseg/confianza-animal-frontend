@@ -30,7 +30,7 @@ import { first, shareReplay } from 'rxjs';
   imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './dog-profile.component.html',
   styleUrls: ['./dog-profile.component.scss'],
-  providers: [NgbModalConfig, NgbModal],
+  providers: [NgbModalConfig, NgbModal, ToastrService],
 })
 export class DogProfileComponent implements OnInit {
   dog$ = this.animalService.getDog(this.route.snapshot.params.id);

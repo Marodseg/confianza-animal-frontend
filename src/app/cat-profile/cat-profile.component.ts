@@ -30,7 +30,7 @@ import { first, shareReplay } from 'rxjs';
   imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './cat-profile.component.html',
   styleUrls: ['./cat-profile.component.scss'],
-  providers: [NgbModalConfig, NgbModal],
+  providers: [NgbModalConfig, NgbModal, ToastrService],
 })
 export class CatProfileComponent implements OnInit {
   cat$ = this.animalService.getCat(this.route.snapshot.params.id);

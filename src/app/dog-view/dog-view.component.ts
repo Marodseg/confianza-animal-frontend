@@ -17,7 +17,7 @@ import { addAnimal } from '../../utils';
   imports: [CommonModule, RouterModule, MatCardModule, ReactiveFormsModule],
   templateUrl: './dog-view.component.html',
   styleUrls: ['./dog-view.component.scss'],
-  providers: [NgbModalConfig, NgbModal],
+  providers: [NgbModalConfig, NgbModal, ToastrService],
 })
 export class DogViewComponent implements OnInit {
   constructor(

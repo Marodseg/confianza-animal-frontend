@@ -1,6 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DogProfileComponent } from './dog-profile.component';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { ToastrModule } from 'ngx-toastr';
 
 describe('DogProfileComponent', () => {
   let component: DogProfileComponent;
@@ -8,7 +11,12 @@ describe('DogProfileComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DogProfileComponent],
+      imports: [
+        DogProfileComponent,
+        HttpClientTestingModule,
+        RouterTestingModule,
+        ToastrModule.forRoot(),
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(DogProfileComponent);

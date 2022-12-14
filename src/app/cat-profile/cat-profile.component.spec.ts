@@ -1,6 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CatProfileComponent } from './cat-profile.component';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { ToastrModule } from 'ngx-toastr';
 
 describe('CatProfileComponent', () => {
   let component: CatProfileComponent;
@@ -8,7 +11,12 @@ describe('CatProfileComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CatProfileComponent],
+      imports: [
+        CatProfileComponent,
+        HttpClientTestingModule,
+        RouterTestingModule,
+        ToastrModule.forRoot(),
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(CatProfileComponent);

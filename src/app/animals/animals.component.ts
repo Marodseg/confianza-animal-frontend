@@ -16,7 +16,7 @@ import { addAnimal } from '../../utils';
   imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './animals.component.html',
   styleUrls: ['./animals.component.scss'],
-  providers: [NgbModalConfig, NgbModal],
+  providers: [NgbModalConfig, NgbModal, ToastrService],
 })
 export class AnimalsComponent implements OnInit {
   constructor(

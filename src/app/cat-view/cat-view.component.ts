@@ -17,7 +17,7 @@ import { addAnimal } from '../../utils';
   imports: [CommonModule, RouterModule, MatCardModule, ReactiveFormsModule],
   templateUrl: './cat-view.component.html',
   styleUrls: ['./cat-view.component.scss'],
-  providers: [NgbModalConfig, NgbModal],
+  providers: [NgbModalConfig, NgbModal, ToastrService],
 })
 export class CatViewComponent implements OnInit {
   constructor(
