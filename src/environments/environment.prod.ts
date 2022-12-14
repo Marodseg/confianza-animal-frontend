@@ -1,5 +1,7 @@
-const PROTOCOL = 'http';
-const DOMAIN = 'localhost:8000';
+const PROTOCOL = 'https';
+const DOMAIN = 'confianza-animal-backend.onrender.com';
+// const PROTOCOL = 'http';
+// const DOMAIN = 'localhost:8000';
 
 export const environment = {
   production: true,
