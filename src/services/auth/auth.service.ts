@@ -91,7 +91,7 @@ export class AuthService {
     this.cookieService.delete(this.tokenName);
     localStorage.removeItem(this.tokenName);
     this.route.navigate(['/login']);
-    if (tokenExpired) {
+    if (this.getToken() && tokenExpired) {
       this.toastr.info('Su sesión ha expirado. Vuelva a iniciar sesión');
     } else {
       this.toastr.info('Se ha cerrado la sesión');
