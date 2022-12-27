@@ -58,3 +58,4 @@ baseline.json
 .husky/_
 
 .angular/cache
+/.firebase/*.cache
