@@ -8,7 +8,7 @@ import { NgbModal, NgbModalConfig } from '@ng-bootstrap/ng-bootstrap';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Cat } from '../interfaces/interfaces';
 import { first, shareReplay } from 'rxjs';
-import { MatCardModule } from '@angular/material/card';
+import { MatLegacyCardModule as MatCardModule } from '@angular/material/legacy-card';
 import { addAnimal } from '../../utils';
 
 @Component({
