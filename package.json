@@ -14,6 +14,7 @@
   },
   "private": true,
   "dependencies": {
+    "@angular-devkit/schematics": "^15.0.4",
     "@angular/animations": "^15.0.4",
     "@angular/cdk": "^15.0.3",
     "@angular/common": "^15.0.4",
@@ -26,9 +27,6 @@
     "@angular/platform-browser-dynamic": "^15.0.4",
     "@angular/router": "^15.0.4",
     "@auth0/angular-jwt": "^5.1.0",
-    "@fortawesome/angular-fontawesome": "^0.12.0",
-    "@fortawesome/fontawesome-svg-core": "^6.2.0",
-    "@fortawesome/free-solid-svg-icons": "^6.2.0",
     "@ng-bootstrap/ng-bootstrap": "^14.0.0",
     "@ngrx/effects": "^15.1.0",
     "@ngrx/store": "^15.1.0",

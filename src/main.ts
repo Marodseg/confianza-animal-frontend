@@ -6,7 +6,6 @@ import { PreloadAllModules, RouterModule } from '@angular/router';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { APP_ROUTES } from './app/app-routes';
 import { AuthService } from './services/auth/auth.service';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { JWT_OPTIONS, JwtHelperService } from '@auth0/angular-jwt';
 import { AuthGuardService } from './services/auth-guard/auth-guard.service';
 import { CookieService } from 'ngx-cookie-service';
@@ -31,7 +30,6 @@ bootstrapApplication(AppComponent, {
       }),
       HttpClientModule,
       BrowserModule,
-      FontAwesomeModule,
       NgbModule,
       ToastrModule.forRoot({
         preventDuplicates: true,
