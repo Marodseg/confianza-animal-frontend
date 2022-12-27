@@ -2,9 +2,8 @@ import { enableProdMode, importProvidersFrom } from '@angular/core';
 import { environment } from './environments/environment';
 import { bootstrapApplication, BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app/app.component';
-import { RouterModule } from '@angular/router';
+import { PreloadAllModules, RouterModule } from '@angular/router';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { QuicklinkModule, QuicklinkStrategy } from 'ngx-quicklink';
 import { APP_ROUTES } from './app/app-routes';
 import { AuthService } from './services/auth/auth.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -28,11 +27,10 @@ bootstrapApplication(AppComponent, {
   providers: [
     importProvidersFrom([
       RouterModule.forRoot(APP_ROUTES, {
-        preloadingStrategy: QuicklinkStrategy,
+        preloadingStrategy: PreloadAllModules,
       }),
       HttpClientModule,
       BrowserModule,
-      QuicklinkModule,
       FontAwesomeModule,
       NgbModule,
       ToastrModule.forRoot({
