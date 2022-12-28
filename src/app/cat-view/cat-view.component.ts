@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { UserService } from '../../services/user/user.service';
 import { AnimalService } from '../../services/animals/animal.service';
@@ -14,7 +14,13 @@ import { addAnimal } from '../../utils';
 @Component({
   selector: 'app-cat-view',
   standalone: true,
-  imports: [CommonModule, RouterModule, MatCardModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    MatCardModule,
+    ReactiveFormsModule,
+    NgOptimizedImage,
+  ],
   templateUrl: './cat-view.component.html',
   styleUrls: ['./cat-view.component.scss'],
   providers: [NgbModalConfig, NgbModal, ToastrService],

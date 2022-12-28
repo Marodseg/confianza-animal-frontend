@@ -16,12 +16,12 @@
             "
             alt="Dog profile photo" />
           <button class="btn btn-danger" (click)="open(content)">
-            <i class="fas fa-trash"></i>
+            <i class="bi bi-trash3"></i>
           </button>
 
           <ng-template #content let-c="close" let-d="dismiss">
             <div class="modal-header">
-              <h2 class="modal-title" id="modal-basic-title">Borrar foto</h2>
+              <h3 class="modal-title" id="modal-basic-title">Borrar foto</h3>
               <button
                 type="button"
                 class="btn-close"
@@ -29,7 +29,7 @@
                 (click)="d('Cross click')"></button>
             </div>
             <div class="modal-body">
-              <h3>¿Estás seguro de que quieres borrar la foto?</h3>
+              <p>¿Estás seguro de que quieres borrar la foto?</p>
             </div>
             <div class="modal-footer">
               <button

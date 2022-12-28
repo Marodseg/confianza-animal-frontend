@@ -5,7 +5,7 @@
       (click)="goToDogs()"
       style="margin-right: 20px">
       <i class="fa-solid fa-dog" style="margin-right: 5px"></i>
-      Ver perros
+      Perros
     </button>
 
     <button class="btn btn-primary" (click)="goToAll()">
@@ -18,7 +18,8 @@
     class="btn btn-primary ms-5"
     id="show_more_cards"
     (click)="newAnimal(false)">
-    <i class="fa-solid fa-plus-circle"></i> Añadir animal
+    <i class="bi bi-plus-circle-fill" style="margin-right: 5px"></i> Añadir
+    animal
   </button>
 </div>
 <div
@@ -36,20 +37,24 @@
           : 'https://dummyimage.com/254x190/ffffff/000000.png&text=No+hay+fotos'
       " />
     <div class="card-body text-center">
-      <h2 class="card-title">
+      <h3 class="card-title">
         <b>{{ cat.name }}</b>
-      </h2>
+      </h3>
       <ul class="list-group mb-2" style="font-size: 17px">
         <li class="list-group-item list-group-item-info">
-          <i class="fa-solid fa-venus-mars" style="font-size: 20px"></i>
+          <i
+            class="bi bi-gender-ambiguous"
+            style="font-size: 20px; margin-right: 5px"></i>
           {{ cat.gender }}
         </li>
         <li class="list-group-item list-group-item-info">
-          <i class="fa fa-user" style="font-size: 20px"></i>
+          <i
+            class="bi bi-hospital"
+            style="font-size: 20px; margin-right: 5px"></i>
           {{ cat.neutered ? 'Castrado' : 'Sin castrar' }}
         </li>
         <li class="list-group-item list-group-item-info">
-          <i class="fa-solid fa-clock-rotate-left" style="font-size: 20px"></i>
+          <i class="bi bi-alarm" style="font-size: 20px; margin-right: 5px"></i>
           {{ cat.is_urgent ? 'Urgente' : 'No urgente' }}
         </li>
       </ul>
@@ -58,15 +63,15 @@
         (click)="editCat(cat?.id)"
         class="btn btn-primary"
         style="margin-right: 20px">
-        <i class="fa-solid fa-edit"></i>
+        <i class="bi bi-pencil-square"></i>
       </button>
       <button type="button" (click)="open(contentCat)" class="btn btn-danger">
-        <i class="fa-solid fa-trash"></i>
+        <i class="bi bi-trash3"></i>
       </button>
 
       <ng-template #contentCat let-c="close" let-d="dismiss">
         <div class="modal-header">
-          <h2 class="modal-title">Borrar animal</h2>
+          <h3 class="modal-title">Borrar animal</h3>
           <button
             type="button"
             class="btn-close"
@@ -74,7 +79,7 @@
             (click)="d('Cross click')"></button>
         </div>
         <div class="modal-body">
-          <h3>¿Estás seguro de que quieres borrar el animal?</h3>
+          <p>¿Estás seguro de que quieres borrar el animal?</p>
         </div>
         <div class="modal-footer">
           <button

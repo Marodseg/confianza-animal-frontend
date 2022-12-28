@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule, Location } from '@angular/common';
+import { CommonModule, Location, NgOptimizedImage } from '@angular/common';
 import {
   FormControl,
   FormGroup,
@@ -27,7 +27,7 @@ import { first, shareReplay } from 'rxjs';
 @Component({
   selector: 'app-cat-profile',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, NgOptimizedImage],
   templateUrl: './cat-profile.component.html',
   styleUrls: ['./cat-profile.component.scss'],
   providers: [NgbModalConfig, NgbModal, ToastrService],

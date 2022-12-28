@@ -24,48 +24,48 @@
         flex-direction: column;
         justify-content: flex-end;
       ">
-      <h3
+      <h2
         class="card-title mb-4"
-        style="font-size: 20px; text-align: center; cursor: pointer"
+        style="font-size: 24px; text-align: center; cursor: pointer"
         (click)="editAnimal(petition.cat ? petition.cat : petition.dog)">
         {{ petition.cat ? petition.cat.name : petition.dog.name }}
         &nbsp;
-        <i class="fas fa-eye"></i>
-      </h3>
+        <i class="bi bi-eye-fill"></i>
+      </h2>
       <h4
-        class="card-subtitle mb-2"
+        class="card-subtitle mb-3"
         style="font-size: 14px; font-weight: 500; text-decoration: underline">
         Usuario:
       </h4>
-      <h4 class="card-subtitle mb-2" style="font-size: 14px">
+      <h4 class="card-subtitle mb-3" style="font-size: 14px">
         {{ petition.user_name }}
       </h4>
       <h4
-        class="card-subtitle mb-2"
+        class="card-subtitle mb-3"
         style="font-size: 14px; font-weight: 500; text-decoration: underline">
         Correo:
       </h4>
-      <h4 class="card-subtitle mb-2" style="font-size: 14px">
+      <h4 class="card-subtitle mb-3" style="font-size: 14px">
         {{ petition.user_email }}
       </h4>
       <h4
-        class="card-subtitle mb-2"
+        class="card-subtitle mb-3"
         style="font-size: 14px; font-weight: 500; text-decoration: underline">
         Motivo de adopción:
       </h4>
-      <h4 class="card-subtitle mb-2" style="font-size: 14px">
+      <h4 class="card-subtitle mb-3" style="font-size: 14px">
         {{ petition.message !== 'null' ? petition.message : 'N/A' }}
       </h4>
       <h4
-        class="card-subtitle mb-2"
+        class="card-subtitle mb-3"
         style="font-size: 14px; font-weight: 500; text-decoration: underline">
         Fecha de la petición:
       </h4>
-      <h4 class="card-subtitle mb-2" style="font-size: 14px; font-weight: 500">
-        {{ petition.date | date: 'dd/MM/yyyy' }}
+      <h4 class="card-subtitle mb-3" style="font-size: 14px; font-weight: 500">
+        {{ petition.date | date : 'dd/MM/yyyy' }}
       </h4>
       <h4
-        class="card-subtitle mb-2"
+        class="card-subtitle mb-3"
         style="font-size: 14px; font-weight: 500; text-decoration: underline">
         Estado de la petición:
       </h4>
@@ -74,13 +74,13 @@
         style="font-size: 14px; font-weight: 500"
         [ngStyle]="{
           color:
-            petition.status === 'Aceptada'
+            petition.status.toUpperCase() === 'ACEPTADA'
               ? '#32cf32'
-              : petition.status === 'Rechazada'
-              ? 'red'
+              : petition.status.toUpperCase() === 'RECHAZADA'
+              ? '#dc3545'
               : '#b9b041'
         }">
-        {{ petition.status }}
+        {{ petition.status | uppercase }}
       </h4>
       <div style="display: flex; flex-direction: row; justify-content: center">
         <button
@@ -90,7 +90,7 @@
           *ngIf="
             petition.status === 'Pendiente' || petition.status === 'Rechazada'
           ">
-          <i class="fas fa-check"></i> Aceptar
+          <i class="bi bi-check-lg"></i> Aceptar
         </button>
         <button
           class="btn btn-danger"
@@ -99,13 +99,13 @@
           *ngIf="
             petition.status === 'Pendiente' || petition.status === 'Aceptada'
           ">
-          <i class="fas fa-xmark"></i> Rechazar
+          <i class="bi bi-x-lg"></i> Rechazar
         </button>
       </div>
 
       <ng-template #contentAccept let-c="close" let-d="dismiss">
         <div class="modal-header">
-          <h2 class="modal-title">Aceptar petición</h2>
+          <h3 class="modal-title">Aceptar petición</h3>
           <button
             type="button"
             class="btn-close"
@@ -113,7 +113,7 @@
             (click)="d('Cross click')"></button>
         </div>
         <div class="modal-body">
-          <h3>¿Estás seguro de que quieres aceptar la petición?</h3>
+          <p>¿Estás seguro de que quieres aceptar la petición?</p>
         </div>
         <div class="modal-footer">
           <button
@@ -127,7 +127,7 @@
 
       <ng-template #contentReject let-c="close" let-d="dismiss">
         <div class="modal-header">
-          <h2 class="modal-title">Rechazar petición</h2>
+          <h4 class="modal-title">Rechazar petición</h4>
           <button
             type="button"
             class="btn-close"
@@ -135,14 +135,14 @@
             (click)="d('Cross click')"></button>
         </div>
         <div class="modal-body">
-          <h3>¿Estás seguro de que quieres rechazar la petición?</h3>
+          <p>¿Estás seguro de que quieres rechazar la petición?</p>
         </div>
         <div class="modal-footer">
           <button
             type="button"
             class="btn btn-outline-danger"
             (click)="deletePetition(petition.id)">
-            Borrar
+            Rechazar
           </button>
         </div>
       </ng-template>

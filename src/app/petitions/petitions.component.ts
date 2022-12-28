@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { UserService } from '../../services/user/user.service';
 import { Cat, Dog, Petition } from '../interfaces/interfaces';
 import { Router, RouterModule } from '@angular/router';
@@ -11,7 +11,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 @Component({
   selector: 'app-petitions',
   standalone: true,
-  imports: [CommonModule, RouterModule, ReactiveFormsModule],
+  imports: [CommonModule, RouterModule, ReactiveFormsModule, NgOptimizedImage],
   templateUrl: './petitions.component.html',
   styleUrls: ['./petitions.component.scss'],
   providers: [NgbModalConfig, NgbModal],

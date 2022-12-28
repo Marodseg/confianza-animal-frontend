@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { UserService } from '../../services/user/user.service';
 import { Organization } from '../interfaces/interfaces';
@@ -17,7 +17,7 @@ import { processFile } from 'src/utils';
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, RouterModule, ReactiveFormsModule],
+  imports: [CommonModule, RouterModule, ReactiveFormsModule, NgOptimizedImage],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss'],
 })

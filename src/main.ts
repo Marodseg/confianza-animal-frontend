@@ -17,6 +17,7 @@ import { FilterService } from './services/filter/filter.service';
 import { StoreModule } from '@ngrx/store';
 import { AnimalService } from './services/animals/animal.service';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 if (environment.production) {
   enableProdMode();
@@ -35,7 +36,11 @@ bootstrapApplication(AppComponent, {
         preventDuplicates: true,
         positionClass: 'toast-bottom-center',
       }),
-      StoreModule.forRoot({}),
+      StoreModule.forRoot({}, {}),
+      StoreDevtoolsModule.instrument({
+        maxAge: 25, // Retains last 25 states
+        logOnly: environment.production, // Restrict extension to log-only mode
+      }),
     ]),
     provideAnimations(),
     AuthService,
