@@ -4,6 +4,7 @@ import { CatProfileComponent } from './cat-profile.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ToastrModule } from 'ngx-toastr';
+import { StoreModule } from '@ngrx/store';
 
 describe('CatProfileComponent', () => {
   let component: CatProfileComponent;
@@ -16,6 +17,7 @@ describe('CatProfileComponent', () => {
         HttpClientTestingModule,
         RouterTestingModule,
         ToastrModule.forRoot(),
+        StoreModule.forRoot({}),
       ],
     }).compileComponents();
 

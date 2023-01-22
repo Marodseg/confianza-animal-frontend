@@ -6,10 +6,13 @@ import { AnimalService } from '../../services/animals/animal.service';
 import { ToastrService } from 'ngx-toastr';
 import { NgbModal, NgbModalConfig } from '@ng-bootstrap/ng-bootstrap';
 import { Dog } from '../interfaces/interfaces';
-import { first, shareReplay } from 'rxjs';
-import { MatLegacyCardModule as MatCardModule } from '@angular/material/legacy-card';
+import { Observable } from 'rxjs';
 import { ReactiveFormsModule } from '@angular/forms';
 import { addAnimal } from '../../utils';
+import { Store } from '@ngrx/store';
+import { selectDogsItems } from '../state/selectors/animals.selectors';
+import { AppState } from '../state/app.state';
+import { MatDividerModule } from '@angular/material/divider';
 
 @Component({
   selector: 'app-dog-view',
@@ -17,9 +20,9 @@ import { addAnimal } from '../../utils';
   imports: [
     CommonModule,
     RouterModule,
-    MatCardModule,
     ReactiveFormsModule,
     NgOptimizedImage,
+    MatDividerModule,
   ],
   templateUrl: './dog-view.component.html',
   styleUrls: ['./dog-view.component.scss'],
@@ -31,24 +34,20 @@ export class DogViewComponent implements OnInit {
     public animalService: AnimalService,
     public router: Router,
     public toastrService: ToastrService,
-    public modalService: NgbModal
+    public modalService: NgbModal,
+    private store: Store<AppState>
   ) {}
 
   open(content: any) {
     if (content) {
-      this.modalService.open(content);
+      this.modalService.open(content, { centered: true });
     }
   }
 
-  dogs$ = this.userService.getDogs();
-  dogs: Dog[] = [];
+  dogs$: Observable<Dog[]> = new Observable();
 
   ngOnInit(): void {
-    this.dogs$.pipe(first()).subscribe(data => {
-      data.forEach(dog => {
-        this.dogs.push(dog);
-      });
-    }, shareReplay());
+    this.dogs$ = this.store.select(selectDogsItems);
   }
 
   editDog(id: string | undefined) {

@@ -12,3 +12,14 @@ body {
   margin: 0;
   font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
+
+.btn-primary,
+.btn-check:checked + .btn {
+  background-color: #006fab;
+  border-color: #006fab;
+  color: #ffffff;
+  &:hover {
+    background-color: #d3851f;
+    border-color: #d3851f;
+  }
+}

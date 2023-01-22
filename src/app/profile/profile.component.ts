@@ -3,7 +3,7 @@ import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { UserService } from '../../services/user/user.service';
 import { Organization } from '../interfaces/interfaces';
-import { first, shareReplay } from 'rxjs';
+import { Observable } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import {
   FormControl,
@@ -12,7 +12,12 @@ import {
   Validators,
 } from '@angular/forms';
 import { FilterService } from '../../services/filter/filter.service';
-import { processFile } from 'src/utils';
+import { isProvince, processFile } from 'src/utils';
+import { Store } from '@ngrx/store';
+import { AppState } from '../state/app.state';
+import { selectProvincesItems } from '../state/selectors/filters.selectors';
+import { selectOrganizationItems } from '../state/selectors/organization.selectors';
+import { LOAD_ORGANIZATION } from '../state/actions/organization.actions';
 
 @Component({
   selector: 'app-profile',
@@ -22,20 +27,19 @@ import { processFile } from 'src/utils';
   styleUrls: ['./profile.component.scss'],
 })
 export class ProfileComponent implements OnInit {
-  organization$ = this.userService.getUserProfile();
-
-  initialName = '';
-  initialPhone = '';
-  initialZone = '';
+  initialName: string | undefined = '';
+  initialPhone: string | undefined = '';
+  initialZone: string | undefined = '';
 
   constructor(
     public userService: UserService,
     public toastr: ToastrService,
-    public filterService: FilterService
+    public filterService: FilterService,
+    private store: Store<AppState>
   ) {}
 
-  provinces$ = this.filterService.getProvinces();
-  provinces: [string] = [''];
+  provinces$ = this.store.select(selectProvincesItems);
+  organization$ = this.store.select(selectOrganizationItems);
 
   public profileForm = new FormGroup({
     phone: new FormControl('', {
@@ -49,18 +53,13 @@ export class ProfileComponent implements OnInit {
   });
 
   ngOnInit() {
-    this.provinces$.pipe(first()).subscribe(data => {
-      data.forEach(province => {
-        this.provinces.push(province);
-      });
-    }, shareReplay());
-
-    this.organization$.subscribe((organization: Organization) => {
-      this.initialPhone = organization.phone;
-      this.initialZone = organization.zone;
+    this.store.select(selectOrganizationItems).subscribe(data => {
+      this.initialName = data?.name;
+      this.initialPhone = data?.phone;
+      this.initialZone = data?.zone;
       this.profileForm.patchValue({
-        phone: organization.phone,
-        zone: organization.zone,
+        phone: data?.phone,
+        zone: data?.zone,
       });
     });
   }
@@ -100,11 +99,12 @@ export class ProfileComponent implements OnInit {
     );
   }
 
-  isProvince(province?: string): boolean {
-    if (province) {
-      return this.provinces.includes(province);
-    }
-    return false;
+  checkProvince(province?: string): boolean {
+    let provinces = [''];
+    this.store.select(selectProvincesItems).subscribe(data => {
+      provinces = data;
+    });
+    return isProvince(provinces, province);
   }
 
   processImage(imageInput: any) {

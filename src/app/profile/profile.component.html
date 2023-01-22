@@ -1,4 +1,4 @@
-<div class="container-xl px-4 mt-4" *ngIf="(organization$ | async)?.photo">
+<div class="container-xl px-4 mt-4">
   <hr class="mt-0 mb-4" />
   <div class="row">
     <div class="col-xl-5">
@@ -103,12 +103,12 @@
                 <datalist id="datalistOptions">
                   <option
                     [value]="province"
-                    *ngFor="let province of provinces"></option>
+                    *ngFor="let province of provinces$ | async"></option>
                 </datalist>
 
                 <small
                   class="text-danger"
-                  *ngIf="!isProvince(zone?.value) && zone?.touched">
+                  *ngIf="!checkProvince(zone?.value) && zone?.touched">
                   La provincia es obligatoria y debe ser una de la lista
                 </small>
               </div>
@@ -121,7 +121,7 @@
                   type="button"
                   [disabled]="
                     profileForm.invalid ||
-                    (!isProvince(zone?.value) && zone?.touched)
+                    (!checkProvince(zone?.value) && zone?.touched)
                   "
                   (click)="updateProfile()">
                   Guardar cambios

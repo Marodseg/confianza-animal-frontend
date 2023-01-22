@@ -1,9 +1,9 @@
 <div
-  class="row col-xs-12 col-sm-8 col-md-9 col-lg-11 justify-content-center"
-  style="width: 100%; margin-top: 25px">
+  class="row col-xs-12 col-sm-8 col-md-9"
+  style="justify-content: center; width: 100%">
   <div
     class="card p-2 m-3 shadow p-3 mb-5 rounded"
-    style="width: min-content"
+    style="width: 16rem; background-color: #f3e8de59"
     *ngFor="let petition of petitions">
     <img
       [src]="
@@ -13,135 +13,582 @@
           ? petition.dog.photos[0]
           : 'https://dummyimage.com/400x400/ffffff/000000.png&text=Subir+foto'
       "
-      class="card-img-top"
-      style="min-height: 17rem; max-height: 17rem"
+      class="card-img-top rounded"
       alt="..." />
-    <div
-      class="card-body"
-      style="
-        width: 20rem;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-end;
-      ">
-      <h2
-        class="card-title mb-4"
-        style="font-size: 24px; text-align: center; cursor: pointer"
-        (click)="editAnimal(petition.cat ? petition.cat : petition.dog)">
-        {{ petition.cat ? petition.cat.name : petition.dog.name }}
-        &nbsp;
-        <i class="bi bi-eye-fill"></i>
-      </h2>
-      <h4
-        class="card-subtitle mb-3"
-        style="font-size: 14px; font-weight: 500; text-decoration: underline">
-        Usuario:
+    <div class="card-body text-center">
+      <h4 class="card-title" style="letter-spacing: 1.5px">
+        <b style="margin-right: 10px; font-weight: 500; font-size: 16px">{{
+          petition.cat ? petition.cat.name : petition.dog.name
+        }}</b>
+        <i
+          class="bi bi-eye-fill"
+          style="cursor: pointer; color: #006fab; font-size: 20px"
+          (click)="
+            petition.cat ? editCat(petition.cat.id) : editDog(petition.dog.id)
+          "></i>
       </h4>
-      <h4 class="card-subtitle mb-3" style="font-size: 14px">
-        {{ petition.user_name }}
-      </h4>
-      <h4
-        class="card-subtitle mb-3"
-        style="font-size: 14px; font-weight: 500; text-decoration: underline">
-        Correo:
-      </h4>
-      <h4 class="card-subtitle mb-3" style="font-size: 14px">
-        {{ petition.user_email }}
-      </h4>
-      <h4
-        class="card-subtitle mb-3"
-        style="font-size: 14px; font-weight: 500; text-decoration: underline">
-        Motivo de adopción:
-      </h4>
-      <h4 class="card-subtitle mb-3" style="font-size: 14px">
-        {{ petition.message !== 'null' ? petition.message : 'N/A' }}
-      </h4>
-      <h4
-        class="card-subtitle mb-3"
-        style="font-size: 14px; font-weight: 500; text-decoration: underline">
-        Fecha de la petición:
-      </h4>
-      <h4 class="card-subtitle mb-3" style="font-size: 14px; font-weight: 500">
-        {{ petition.date | date : 'dd/MM/yyyy' }}
-      </h4>
-      <h4
-        class="card-subtitle mb-3"
-        style="font-size: 14px; font-weight: 500; text-decoration: underline">
-        Estado de la petición:
-      </h4>
-      <h4
-        class="card-subtitle mb-4"
-        style="font-size: 14px; font-weight: 500"
-        [ngStyle]="{
-          color:
-            petition.status.toUpperCase() === 'ACEPTADA'
-              ? '#32cf32'
-              : petition.status.toUpperCase() === 'RECHAZADA'
-              ? '#dc3545'
-              : '#b9b041'
-        }">
-        {{ petition.status | uppercase }}
-      </h4>
-      <div style="display: flex; flex-direction: row; justify-content: center">
+
+      <div
+        style="
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 0.5rem;
+          font-size: 15px;
+          font-weight: 500;
+          margin-bottom: 1.5rem;
+          padding: 0.7rem;
+          border: 2px solid #9897cd;
+          border-radius: 6px;
+          min-height: 12rem;
+        ">
+        Fecha de creación:
+        <span style="font-weight: 300">{{
+          petition.date | date : 'dd/MM/yyyy'
+        }}</span>
+        Estado:
+        <span style="font-weight: 300; text-align: start">{{
+          petition.status
+        }}</span>
+        <a
+          style="
+            position: absolute;
+            bottom: 1rem;
+            cursor: pointer;
+            color: #d3851f;
+            text-decoration: underline;
+            align-self: center;
+            margin-top: 0.5rem;
+          "
+          (click)="open(contentDetails)">
+          Más detalles
+        </a>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 0.7rem">
         <button
-          class="btn btn-primary"
-          (click)="open(contentAccept)"
-          style="background-color: #26a126; margin-right: 15px"
-          *ngIf="
-            petition.status === 'Pendiente' || petition.status === 'Rechazada'
-          ">
-          <i class="bi bi-check-lg"></i> Aceptar
+          style="
+            color: #006fab;
+            text-decoration: underline;
+            font-size: 16px;
+            border: none;
+            background: transparent;
+            padding: 0;
+          "
+          (click)="open(contentUpdate)"
+          [disabled]="
+            petition.status === 'Solicitud rechazada' ||
+            petition.status === 'Pendiente de documentación' ||
+            petition.status === 'Documentación rechazada' ||
+            petition.status === 'Información rechazada' ||
+            petition.status === 'Solicitud aceptada' ||
+            petition.status === 'Información pendiente de revisión' ||
+            petition.status === 'Documentación modificada' ||
+            petition.status === 'Información modificada' ||
+            petition.status === 'Documentación enviada' ||
+            petition.status === 'Iniciada'
+          "
+          [ngStyle]="{
+            cursor:
+              petition.status === 'Solicitud rechazada' ||
+              petition.status === 'Pendiente de documentación' ||
+              petition.status === 'Documentación rechazada' ||
+              petition.status === 'Información rechazada' ||
+              petition.status === 'Solicitud aceptada' ||
+              petition.status === 'Información pendiente de revisión' ||
+              petition.status === 'Documentación modificada' ||
+              petition.status === 'Información modificada' ||
+              petition.status === 'Documentación enviada' ||
+              petition.status === 'Iniciada'
+                ? 'not-allowed'
+                : 'pointer',
+            color:
+              petition.status === 'Solicitud rechazada' ||
+              petition.status === 'Pendiente de documentación' ||
+              petition.status === 'Documentación rechazada' ||
+              petition.status === 'Información rechazada' ||
+              petition.status === 'Solicitud aceptada' ||
+              petition.status === 'Información pendiente de revisión' ||
+              petition.status === 'Documentación modificada' ||
+              petition.status === 'Información modificada' ||
+              petition.status === 'Documentación enviada' ||
+              petition.status === 'Iniciada'
+                ? '#9897cd'
+                : '#006fab'
+          }">
+          Aprobar petición
         </button>
         <button
-          class="btn btn-danger"
-          style="margin-right: 0"
+          style="
+            color: #006fab;
+            text-decoration: underline;
+            font-size: 16px;
+            border: none;
+            background: transparent;
+            padding: 0;
+          "
+          (click)="open(contentUpdate)"
+          [disabled]="
+            petition.status === 'Solicitud rechazada' ||
+            petition.status === 'Pendiente de documentación' ||
+            petition.status === 'Documentación pendiente de revisión' ||
+            petition.status === 'Documentación rechazada' ||
+            petition.status === 'Información rechazada' ||
+            petition.status === 'Solicitud aceptada'
+          "
+          [ngStyle]="{
+            cursor:
+              petition.status === 'Solicitud rechazada' ||
+              petition.status === 'Pendiente de documentación' ||
+              petition.status === 'Documentación pendiente de revisión' ||
+              petition.status === 'Documentación rechazada' ||
+              petition.status === 'Información rechazada' ||
+              petition.status === 'Solicitud aceptada'
+                ? 'not-allowed'
+                : 'pointer',
+            color:
+              petition.status === 'Solicitud rechazada' ||
+              petition.status === 'Pendiente de documentación' ||
+              petition.status === 'Documentación pendiente de revisión' ||
+              petition.status === 'Documentación rechazada' ||
+              petition.status === 'Información rechazada' ||
+              petition.status === 'Solicitud aceptada'
+                ? '#9897cd'
+                : '#006fab'
+          }">
+          Actualizar estado
+        </button>
+
+        <button
+          style="
+            color: #006fab;
+            text-decoration: underline;
+            font-size: 16px;
+            border: none;
+            background: transparent;
+            padding: 0;
+          "
+          (click)="open(contentRejectDocumentation)"
+          [disabled]="petition.status !== 'Documentación pendiente de revisión'"
+          [ngStyle]="{
+            cursor:
+              petition.status !== 'Documentación pendiente de revisión'
+                ? 'not-allowed'
+                : 'pointer',
+            color:
+              petition.status !== 'Documentación pendiente de revisión'
+                ? '#9897cd'
+                : '#006fab'
+          }">
+          Rechazar documentación
+        </button>
+
+        <button
+          style="
+            color: red;
+            text-decoration: underline;
+            font-size: 14px;
+            border: none;
+            background: transparent;
+            padding: 0;
+            margin-top: 1rem;
+          "
+          [disabled]="petition.status === 'Solicitud rechazada'"
           (click)="open(contentReject)"
-          *ngIf="
-            petition.status === 'Pendiente' || petition.status === 'Aceptada'
-          ">
-          <i class="bi bi-x-lg"></i> Rechazar
+          [ngStyle]="{
+            cursor:
+              petition.status === 'Solicitud rechazada'
+                ? 'not-allowed'
+                : 'pointer',
+            color: petition.status === 'Solicitud rechazada' ? '#ff7f7f' : 'red'
+          }">
+          Rechazar petición
         </button>
       </div>
 
-      <ng-template #contentAccept let-c="close" let-d="dismiss">
+      <ng-template #contentDetails let-c="close" let-d="dismiss">
         <div class="modal-header">
-          <h3 class="modal-title">Aceptar petición</h3>
+          <div class="modal-title" style="font-weight: 400; font-size: 18px">
+            Detalles de la petición
+          </div>
           <button
             type="button"
             class="btn-close"
             aria-label="Close"
             (click)="d('Cross click')"></button>
         </div>
-        <div class="modal-body">
-          <p>¿Estás seguro de que quieres aceptar la petición?</p>
+        <div class="modal-body" style="font-weight: 500">
+          Nombre del usuario:
+          <p style="font-weight: 300">{{ petition.user_name }}</p>
+          Correo del usuario:
+          <p style="font-weight: 300">{{ petition.user_email }}</p>
+          Motivo de la adopción:
+          <p style="font-weight: 300">{{ petition.user_message }}</p>
+          Fecha de creación:
+          <p style="font-weight: 300">
+            {{ petition.date | date : 'dd/MM/yyyy' }}
+          </p>
+          Estado actual:
+          <p style="font-weight: 300">{{ petition.status }}</p>
+        </div>
+      </ng-template>
+
+      <ng-template #contentUpdate let-c="close" let-d="dismiss">
+        <ng-container
+          *ngIf="
+            petition.status !== 'Información pendiente de revisión' &&
+            petition.status !== 'Documentación pendiente de revisión'
+          ">
+          <div class="modal-header">
+            <div class="modal-title" style="font-weight: 400; font-size: 18px">
+              Actualizar estado
+            </div>
+            <button
+              type="button"
+              class="btn-close"
+              aria-label="Close"
+              (click)="d('Cross click')"></button>
+          </div>
+          <div class="modal-body" style="font-weight: 500">
+            <p style="color: #006fab">La petición cambiará de estado:</p>
+            <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem">
+              <p style="font-weight: 300; text-decoration: line-through">
+                {{ petition.status }}
+              </p>
+              <i class="bi bi-arrow-right"></i>
+              <p style="font-weight: 300">
+                {{
+                  petition.status === 'Iniciada'
+                    ? 'Información pendiente de revisión'
+                    : petition.status === 'Información pendiente de revisión'
+                    ? 'Pendiente de documentación'
+                    : petition.status === 'Documentación enviada'
+                    ? 'Documentación pendiente de revisión'
+                    : petition.status === 'Documentación modificada'
+                    ? 'Documentación pendiente de revisión'
+                    : 'Información pendiente de revisión'
+                }}
+              </p>
+            </div>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Escribe un mensaje para {{ petition.user_name }}"
+              style="margin-top: 1rem; font-size: 15px"
+              [formControl]="orgMessage" />
+            <small
+              class="text-danger"
+              style="margin-top: 0.5rem; font-weight: initial"
+              *ngIf="orgMessage?.errors?.required && orgMessage?.touched">
+              El mensaje es obligatorio
+            </small>
+          </div>
+          <div class="modal-footer">
+            <button
+              [disabled]="orgMessage.invalid"
+              class="btn btn-primary mb-2"
+              type="button"
+              (click)="updatePetition(petition.id, orgMessage.value)">
+              Actualizar
+            </button>
+          </div>
+        </ng-container>
+        <ng-container
+          *ngIf="petition.status === 'Información pendiente de revisión'">
+          <div class="modal-header">
+            <div class="modal-title" style="font-weight: 400; font-size: 18px">
+              Aprobar la información
+            </div>
+            <button
+              type="button"
+              class="btn-close"
+              aria-label="Close"
+              (click)="d('Cross click')"></button>
+          </div>
+          <div
+            class="modal-body"
+            style="
+              font-weight: 500;
+              display: flex;
+              flex-direction: column;
+              gap: 1rem;
+            "
+            [formGroup]="informationForm">
+            <div
+              style="
+                display: flex;
+                flex-direction: row;
+                gap: 0.5rem;
+                align-items: center;
+              ">
+              Tipo de vivienda:
+              <p style="font-weight: 300; margin: 0">
+                {{ petition.home_type }}
+              </p>
+              <input type="checkbox" formControlName="home_type_bool" />
+            </div>
+
+            <div
+              style="
+                display: flex;
+                flex-direction: row;
+                gap: 0.5rem;
+                align-items: center;
+              ">
+              Tiempo libre semanal disponible para la mascota:
+              <p style="font-weight: 300; margin: 0">
+                {{ petition.free_time }}
+              </p>
+              <input type="checkbox" formControlName="free_time_bool" />
+            </div>
+
+            <div
+              style="
+                display: flex;
+                flex-direction: row;
+                gap: 0.5rem;
+                align-items: center;
+              ">
+              Tiene experiencia con otras mascotas:
+              <p style="font-weight: 300; margin: 0">
+                {{ petition.previous_experience }}
+              </p>
+              <input
+                type="checkbox"
+                formControlName="previous_experience_bool" />
+            </div>
+
+            <div
+              style="
+                display: flex;
+                flex-direction: row;
+                gap: 0.5rem;
+                align-items: center;
+              ">
+              Viaja frecuentemente:
+              <p style="font-weight: 300; margin: 0">
+                {{ petition.frequency_travel }}
+              </p>
+              <input type="checkbox" formControlName="frequency_travel_bool" />
+            </div>
+
+            <div
+              style="
+                display: flex;
+                flex-direction: row;
+                gap: 0.5rem;
+                align-items: center;
+              ">
+              Tiene niños en casa:
+              <p style="font-weight: 300; margin: 0">{{ petition.kids }}</p>
+              <input type="checkbox" formControlName="kids_bool" />
+            </div>
+
+            <div
+              style="
+                display: flex;
+                flex-direction: row;
+                gap: 0.5rem;
+                align-items: center;
+              ">
+              Tiene otras mascotas en la vivienda:
+              <p style="font-weight: 300; margin: 0">
+                {{ petition.other_animals }}
+              </p>
+              <input type="checkbox" formControlName="other_animals_bool" />
+            </div>
+            <small
+              style="margin-top: 0.5rem; font-weight: initial; color: #006fab">
+              Al marcar cada opción, apruebas esa información del usuario para
+              esta petición. Si rechazas la información por un campo, el usuario
+              será notificado y podrá modificarlo.
+            </small>
+          </div>
+
+          <div style="padding: 1rem">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Escribe un mensaje para {{ petition.user_name }}"
+              style="font-size: 15px"
+              [formControl]="orgMessage" />
+            <small
+              class="text-danger"
+              style="font-weight: initial"
+              *ngIf="orgMessage?.errors?.required && orgMessage?.touched">
+              El mensaje es obligatorio
+            </small>
+          </div>
+          <div class="modal-footer">
+            <button
+              [disabled]="
+                (home_type_bool &&
+                  free_time_bool &&
+                  frequency_travel_bool &&
+                  previous_experience_bool &&
+                  kids_bool &&
+                  other_animals_bool) ||
+                orgMessage.invalid
+              "
+              type="button"
+              class="btn btn-outline-danger"
+              (click)="
+                rejectInformation(
+                  petition.id,
+                  orgMessage.value,
+                  home_type_bool,
+                  free_time_bool,
+                  frequency_travel_bool,
+                  previous_experience_bool,
+                  kids_bool,
+                  other_animals_bool
+                )
+              ">
+              Rechazar información
+            </button>
+            <button
+              [disabled]="
+                !home_type_bool ||
+                !free_time_bool ||
+                !frequency_travel_bool ||
+                !previous_experience_bool ||
+                !kids_bool ||
+                !other_animals_bool ||
+                orgMessage.invalid
+              "
+              type="button"
+              class="btn btn-primary"
+              (click)="updatePetition(petition.id, orgMessage.value)">
+              Aprobar información
+            </button>
+          </div>
+        </ng-container>
+        <ng-container
+          *ngIf="petition.status === 'Documentación pendiente de revisión'">
+          <div class="modal-header">
+            <div class="modal-title" style="font-weight: 400; font-size: 18px">
+              Aprobar petición
+            </div>
+            <button
+              type="button"
+              class="btn-close"
+              aria-label="Close"
+              (click)="d('Cross click')"></button>
+          </div>
+          <div class="modal-body" style="font-weight: 500">
+            <p style="font-weight: 300">
+              ¿Estás seguro de que quieres aprobar la petición?
+            </p>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Escribe el motivo para {{ petition.user_name }}"
+              style="margin-top: 1rem; font-size: 14px"
+              [formControl]="orgMessage" />
+            <small
+              class="text-danger"
+              style="margin-top: 0.5rem; font-weight: initial"
+              *ngIf="orgMessage?.errors?.required && orgMessage?.touched">
+              El mensaje es obligatorio
+            </small>
+          </div>
+          <div class="modal-footer">
+            <button
+              [disabled]="orgMessage.invalid"
+              type="button"
+              class="btn btn-primary mb-2"
+              (click)="
+                acceptPetition(
+                  petition.id,
+                  orgMessage.value,
+                  petition.home_type_bool,
+                  petition.free_time_bool,
+                  petition.frequency_travel_bool,
+                  petition.previous_experience_bool,
+                  petition.kids_bool,
+                  petition.other_animals_bool
+                )
+              ">
+              Aprobar
+            </button>
+          </div>
+        </ng-container>
+      </ng-template>
+
+      <ng-template #contentRejectDocumentation let-c="close" let-d="dismiss">
+        <div class="modal-header">
+          <div class="modal-title" style="font-weight: 400; font-size: 18px">
+            Rechazar documentación
+          </div>
+          <button
+            type="button"
+            class="btn-close"
+            aria-label="Close"
+            (click)="d('Cross click')"></button>
+        </div>
+        <div class="modal-body" style="font-weight: 500">
+          <p style="font-weight: 300">
+            ¿Estás seguro de que quieres rechazar la documentación?
+          </p>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Escribe el motivo para {{ petition.user_name }}"
+            style="margin-top: 1rem; font-size: 14px"
+            [formControl]="orgMessage" />
+          <small
+            class="text-danger"
+            style="margin-top: 0.5rem; font-weight: initial"
+            *ngIf="orgMessage?.errors?.required && orgMessage?.touched">
+            El mensaje es obligatorio
+          </small>
         </div>
         <div class="modal-footer">
           <button
+            [disabled]="orgMessage.invalid"
             type="button"
-            class="btn btn-outline-primary"
-            (click)="acceptPetition(petition.id)">
-            Aceptar
+            class="btn btn-outline-danger"
+            (click)="rejectDocumentation(petition.id, orgMessage.value)">
+            Rechazar
           </button>
         </div>
       </ng-template>
 
       <ng-template #contentReject let-c="close" let-d="dismiss">
         <div class="modal-header">
-          <h4 class="modal-title">Rechazar petición</h4>
+          <div class="modal-title" style="font-weight: 400; font-size: 18px">
+            Rechazar petición
+          </div>
           <button
             type="button"
             class="btn-close"
             aria-label="Close"
             (click)="d('Cross click')"></button>
         </div>
-        <div class="modal-body">
-          <p>¿Estás seguro de que quieres rechazar la petición?</p>
+        <div class="modal-body" style="font-weight: 500">
+          <p style="font-weight: 300">
+            ¿Estás seguro de que quieres rechazar la petición?
+          </p>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Escribe el motivo para {{ petition.user_name }}"
+            style="margin-top: 1rem; font-size: 14px"
+            [formControl]="orgMessage" />
+          <small
+            class="text-danger"
+            style="margin-top: 0.5rem; font-weight: initial"
+            *ngIf="orgMessage?.errors?.required && orgMessage?.touched">
+            El mensaje es obligatorio
+          </small>
         </div>
         <div class="modal-footer">
           <button
+            [disabled]="orgMessage.invalid"
             type="button"
             class="btn btn-outline-danger"
-            (click)="deletePetition(petition.id)">
+            (click)="rejectPetition(petition.id, orgMessage.value)">
             Rechazar
           </button>
         </div>

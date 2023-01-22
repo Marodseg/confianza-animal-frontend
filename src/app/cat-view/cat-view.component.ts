@@ -7,9 +7,11 @@ import { ToastrService } from 'ngx-toastr';
 import { NgbModal, NgbModalConfig } from '@ng-bootstrap/ng-bootstrap';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Cat } from '../interfaces/interfaces';
-import { first, shareReplay } from 'rxjs';
-import { MatLegacyCardModule as MatCardModule } from '@angular/material/legacy-card';
+import { Observable } from 'rxjs';
 import { addAnimal } from '../../utils';
+import { Store } from '@ngrx/store';
+import { selectCatsItems } from '../state/selectors/animals.selectors';
+import { MatDividerModule } from '@angular/material/divider';
 
 @Component({
   selector: 'app-cat-view',
@@ -17,9 +19,9 @@ import { addAnimal } from '../../utils';
   imports: [
     CommonModule,
     RouterModule,
-    MatCardModule,
     ReactiveFormsModule,
     NgOptimizedImage,
+    MatDividerModule,
   ],
   templateUrl: './cat-view.component.html',
   styleUrls: ['./cat-view.component.scss'],
@@ -31,24 +33,20 @@ export class CatViewComponent implements OnInit {
     public animalService: AnimalService,
     public router: Router,
     public toastrService: ToastrService,
-    public modalService: NgbModal
+    public modalService: NgbModal,
+    private store: Store<any>
   ) {}
 
   open(content: any) {
     if (content) {
-      this.modalService.open(content);
+      this.modalService.open(content, { centered: true });
     }
   }
 
-  cats$ = this.userService.getCats();
-  cats: Cat[] = [];
+  cats$: Observable<Cat[]> = new Observable();
 
   ngOnInit(): void {
-    this.cats$.pipe(first()).subscribe(data => {
-      data.forEach(cat => {
-        this.cats.push(cat);
-      });
-    }, shareReplay());
+    this.cats$ = this.store.select(selectCatsItems);
   }
 
   editCat(id: string | undefined) {

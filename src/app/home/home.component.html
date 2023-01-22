@@ -1,5 +1,6 @@
 <nav
-  class="navbar navbar-expand-sm navbar-dark bg-primary flex-sm-nowrap flex-wrap">
+  style="background: #006fab"
+  class="navbar navbar-expand-sm navbar-dark flex-sm-nowrap flex-wrap">
   <div class="container-fluid">
     <button
       class="navbar-toggler flex-grow-sm-1 flex-grow-0 me-2"
@@ -16,7 +17,7 @@
       id="navbarTitle">
       <ul class="navbar-nav mx-auto" style="margin-right: 10% !important">
         <li class="nav-item" style="margin-left: 30px !important">
-          <a class="nav-link text-white" [routerLink]="'/profile'">Perfil</a>
+          <a class="nav-link text-white" [routerLink]="'/profile'">Mi perfil</a>
         </li>
         <li class="nav-item" style="margin-left: 30px !important">
           <a class="nav-link text-white" [routerLink]="'/animals'"
@@ -29,14 +30,15 @@
           >
         </li>
       </ul>
+
       <ul class="navbar-nav ms-auto flex-nowrap">
         <li class="nav-item">
-          <button
-            type="button"
-            class="btn btn-outline-light"
-            (click)="authService.logout()">
-            Logout
-          </button>
+          <i
+            matTooltip="Logout"
+            matTooltipPosition="left"
+            class="bi bi-box-arrow-right"
+            style="color: #d3851f; font-size: 30px; cursor: pointer"
+            (click)="authService.logout(true)"></i>
         </li>
       </ul>
     </div>

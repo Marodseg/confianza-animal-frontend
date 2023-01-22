@@ -11,17 +11,33 @@ import { AuthService } from '../../services/auth/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from '../../services/user/user.service';
 import { FilterService } from '../../services/filter/filter.service';
-import { first, shareReplay } from 'rxjs';
+import { first, Observable, shareReplay } from 'rxjs';
 import { isProvince } from '../../utils';
+import { Store } from '@ngrx/store';
+import { AppState } from '../state/app.state';
+import {
+  selectProvinces,
+  selectProvincesItems,
+} from '../state/selectors/filters.selectors';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   standalone: true,
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
-  imports: [CommonModule, RouterModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    ReactiveFormsModule,
+    MatCheckboxModule,
+    MatTooltipModule,
+  ],
 })
 export class RegisterComponent implements OnInit {
+  terms: boolean = false;
+
   public registerForm = new FormGroup({
     name: new FormControl('', {
       validators: Validators.required,
@@ -40,7 +56,7 @@ export class RegisterComponent implements OnInit {
       nonNullable: true,
     }),
     password: new FormControl('', {
-      validators: [Validators.required, Validators.minLength(6)],
+      validators: [Validators.required, Validators.minLength(8)],
       nonNullable: true,
     }),
     confirmPassword: new FormControl('', {
@@ -54,18 +70,14 @@ export class RegisterComponent implements OnInit {
     public toastr: ToastrService,
     private router: Router,
     public userService: UserService,
-    public filterService: FilterService
+    public filterService: FilterService,
+    private store: Store<AppState>
   ) {}
 
-  provinces$ = this.filterService.getProvinces();
-  provinces: [string] = [''];
+  provinces$: Observable<string[]> = new Observable();
 
   ngOnInit(): void {
-    this.provinces$.pipe(first()).subscribe(data => {
-      data.forEach(province => {
-        this.provinces.push(province);
-      });
-    }, shareReplay());
+    this.provinces$ = this.store.select(selectProvincesItems);
   }
 
   get name() {
@@ -117,6 +129,10 @@ export class RegisterComponent implements OnInit {
   }
 
   checkProvince(province?: string): boolean {
-    return isProvince(this.provinces, province);
+    let provinces = [''];
+    this.store.select(selectProvincesItems).subscribe(data => {
+      provinces = data;
+    });
+    return isProvince(provinces, province);
   }
 }

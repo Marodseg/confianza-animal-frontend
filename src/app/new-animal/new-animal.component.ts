@@ -16,8 +16,16 @@ import {
 import { Router, RouterModule } from '@angular/router';
 import { AnimalService } from '../../services/animals/animal.service';
 import { FilterService } from '../../services/filter/filter.service';
-import { first, shareReplay } from 'rxjs';
+import { first, Observable, shareReplay } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import {
+  selectCatRazesItems,
+  selectDogRazesItems,
+  selectProvincesItems,
+} from '../state/selectors/filters.selectors';
+import { Store } from '@ngrx/store';
+import { AppState } from '../state/app.state';
+import { ADD_CAT, ADD_DOG } from '../state/actions/animals.actions';
 
 @Component({
   selector: 'app-new-animal',
@@ -103,36 +111,18 @@ export class NewAnimalComponent implements OnInit {
     private animalService: AnimalService,
     private filterService: FilterService,
     private router: Router,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private store: Store<AppState>
   ) {}
 
-  dogRazes$ = this.filterService.getDogRazes();
-  dogRazes: string[] = [''];
-
-  catRazes$ = this.filterService.getCatRazes();
-  catRazes: string[] = [''];
-
-  provinces$ = this.filterService.getProvinces();
-  provinces: string[] = [''];
+  dogRazes$: Observable<string[]> = new Observable<string[]>();
+  catRazes$: Observable<string[]> = new Observable<string[]>();
+  provinces$: Observable<string[]> = new Observable<string[]>();
 
   ngOnInit(): void {
-    this.dogRazes$.pipe(first()).subscribe(data => {
-      data.forEach(province => {
-        this.dogRazes.push(province);
-      });
-    }, shareReplay());
-
-    this.catRazes$.pipe(first()).subscribe(data => {
-      data.forEach(province => {
-        this.catRazes.push(province);
-      });
-    }, shareReplay());
-
-    this.provinces$.pipe(first()).subscribe(data => {
-      data.forEach(province => {
-        this.provinces.push(province);
-      });
-    }, shareReplay());
+    this.dogRazes$ = this.store.select(selectDogRazesItems);
+    this.catRazes$ = this.store.select(selectCatRazesItems);
+    this.provinces$ = this.store.select(selectProvincesItems);
 
     this.addAnimalForm.controls.addDog.valueChanges.subscribe(value => {
       if (value) {
@@ -257,17 +247,7 @@ export class NewAnimalComponent implements OnInit {
       isUrgent: this.newAnimalForm.get('isUrgent')?.value,
     };
 
-    this.animalService.postDog(dog).subscribe(
-      data => {
-        this.router.navigate(['/edit/dog/' + data.id]);
-        this.toastr.success('Se ha creado el animal correctamente', '', {
-          timeOut: 4000,
-        });
-      },
-      error => {
-        this.toastr.error(error.error.detail, '', { timeOut: 4000 });
-      }
-    );
+    this.store.dispatch(ADD_DOG({ dog }));
   }
 
   createCat() {
@@ -289,34 +269,36 @@ export class NewAnimalComponent implements OnInit {
       isUrgent: this.newAnimalForm.get('isUrgent')?.value,
     };
 
-    this.animalService.postCat(cat).subscribe(
-      data => {
-        this.router.navigate(['/edit/cat/' + data.id]);
-        this.toastr.success('Se ha creado el animal correctamente', '', {
-          timeOut: 4000,
-        });
-      },
-      error => {
-        this.toastr.error(error.error.detail, '', { timeOut: 4000 });
-      }
-    );
+    this.store.dispatch(ADD_CAT({ cat }));
   }
 
   isDogRaze(raze?: string): boolean {
+    let dogRazes = [''];
+    this.store.select(selectDogRazesItems).subscribe(data => {
+      dogRazes = data;
+    });
     if (raze) {
-      return this.dogRazes.includes(raze);
+      return dogRazes.includes(raze);
     }
     return false;
   }
 
   isCatRaze(raze?: string): boolean {
+    let catRazes = [''];
+    this.store.select(selectCatRazesItems).subscribe(data => {
+      catRazes = data;
+    });
     if (raze) {
-      return this.catRazes.includes(raze);
+      return catRazes.includes(raze);
     }
     return false;
   }
 
   checkProvince(province?: string): boolean {
-    return isProvince(this.provinces, province);
+    let provinces = [''];
+    this.store.select(selectProvincesItems).subscribe(data => {
+      provinces = data;
+    });
+    return isProvince(provinces, province);
   }
 }

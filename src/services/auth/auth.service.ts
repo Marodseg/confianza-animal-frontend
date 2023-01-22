@@ -77,7 +77,6 @@ export class AuthService {
     if (token) {
       const decodedToken = this.jwtHelper.decodeToken(token);
       if (decodedToken.exp < Date.now() / 1000) {
-        this.logout(true);
         return false;
       }
     }
@@ -87,14 +86,14 @@ export class AuthService {
   /**
    * Remove the token from local storage and redirects the user to login page
    */
-  public logout(tokenExpired: boolean = false): void {
+  public logout(logoutButton: boolean = false): void {
     this.cookieService.delete(this.tokenName);
     localStorage.removeItem(this.tokenName);
     this.route.navigate(['/login']);
-    if (this.getToken() && tokenExpired) {
-      this.toastr.info('Su sesión ha expirado. Vuelva a iniciar sesión');
+    if (logoutButton) {
+      this.toastr.info('Has cerrado la sesión');
     } else {
-      this.toastr.info('Se ha cerrado la sesión');
+      this.toastr.info('Inicie sesión para continuar');
     }
   }
 }

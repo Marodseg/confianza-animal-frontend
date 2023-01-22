@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { DogViewComponent } from './dog-view.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ToastrModule } from 'ngx-toastr';
+import { StoreModule } from '@ngrx/store';
 
 describe('DogViewComponent', () => {
   let component: DogViewComponent;
@@ -14,6 +15,7 @@ describe('DogViewComponent', () => {
         DogViewComponent,
         HttpClientTestingModule,
         ToastrModule.forRoot(),
+        StoreModule.forRoot({}),
       ],
     }).compileComponents();
 

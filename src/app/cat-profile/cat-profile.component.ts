@@ -22,7 +22,13 @@ import {
   isCatRaze,
 } from 'src/utils';
 import { FilterService } from '../../services/filter/filter.service';
-import { first, shareReplay } from 'rxjs';
+import { first, Observable, shareReplay } from 'rxjs';
+import {
+  selectCatRazesItems,
+  selectProvincesItems,
+} from '../state/selectors/filters.selectors';
+import { Store } from '@ngrx/store';
+import { AppState } from '../state/app.state';
 
 @Component({
   selector: 'app-cat-profile',
@@ -34,10 +40,9 @@ import { first, shareReplay } from 'rxjs';
 })
 export class CatProfileComponent implements OnInit {
   cat$ = this.animalService.getCat(this.route.snapshot.params.id);
-  provinces$ = this.filterService.getProvinces();
-  provinces: string[] = [];
-  catRazes$ = this.filterService.getCatRazes();
-  razes: string[] = [];
+  provinces$: Observable<string[]> = new Observable<string[]>();
+
+  catRazes$ = new Observable<string[]>();
 
   initialName = '';
   initialAge = 0;
@@ -85,12 +90,13 @@ export class CatProfileComponent implements OnInit {
     public userService: UserService,
     public toastr: ToastrService,
     private modalService: NgbModal,
-    private filterService: FilterService
+    private filterService: FilterService,
+    private store: Store<AppState>
   ) {}
 
   open(content: any) {
     if (content) {
-      this.modalService.open(content);
+      this.modalService.open(content, { centered: true });
     }
   }
 
@@ -139,17 +145,8 @@ export class CatProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.provinces$.pipe(first()).subscribe(data => {
-      data.forEach(province => {
-        this.provinces.push(province);
-      });
-    }, shareReplay());
-
-    this.catRazes$.pipe(first()).subscribe(data => {
-      data.forEach(raze => {
-        this.razes.push(raze);
-      });
-    }, shareReplay());
+    this.provinces$ = this.store.select(selectProvincesItems);
+    this.catRazes$ = this.store.select(selectCatRazesItems);
 
     this.cat$.subscribe(cat => {
       this.initialName = cat.name;
@@ -313,7 +310,7 @@ export class CatProfileComponent implements OnInit {
               timeOut: 4000,
             }
           );
-          this.router.navigate(['/animals']);
+          window.location.reload();
         },
         err => {
           this.toastr.error(err.error.detail, '', { timeOut: 4000 });
@@ -354,10 +351,18 @@ export class CatProfileComponent implements OnInit {
   }
 
   checkProvince(province?: string): boolean {
-    return isProvince(this.provinces, province);
+    let provinces = [''];
+    this.store.select(selectProvincesItems).subscribe(data => {
+      provinces = data;
+    });
+    return isProvince(provinces, province);
   }
 
   checkCatRaze(raze?: string): boolean {
-    return isCatRaze(this.razes, raze);
+    let catRazes = [''];
+    this.store.select(selectCatRazesItems).subscribe(data => {
+      catRazes = data;
+    });
+    return isCatRaze(catRazes, raze);
   }
 }

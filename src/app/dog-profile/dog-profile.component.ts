@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule, Location, NgOptimizedImage } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import {
   FormControl,
   FormGroup,
@@ -19,10 +19,16 @@ import {
   isSizeOption,
   processDogFiles,
 } from '../../utils';
-import * as moment from 'moment';
 import { NgbModal, NgbModalConfig } from '@ng-bootstrap/ng-bootstrap';
 import { FilterService } from '../../services/filter/filter.service';
-import { first, shareReplay } from 'rxjs';
+import { Observable } from 'rxjs';
+import {
+  selectDogRazesItems,
+  selectProvincesItems,
+} from '../state/selectors/filters.selectors';
+import { Store } from '@ngrx/store';
+import { AppState } from '../state/app.state';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-dog-profile',
@@ -36,11 +42,9 @@ export class DogProfileComponent implements OnInit {
   dog$ = this.animalService.getDog(this.route.snapshot.params.id);
   dogPhotos: string[] = [];
 
-  provinces$ = this.filterService.getProvinces();
-  provinces: string[] = [''];
+  provinces$: Observable<string[]> = new Observable<string[]>();
 
-  dogRazes$ = this.filterService.getDogRazes();
-  razes: string[] = [''];
+  dogRazes$ = new Observable<string[]>();
 
   initialName = '';
   initialAge = 0;
@@ -88,12 +92,13 @@ export class DogProfileComponent implements OnInit {
     public userService: UserService,
     public toastr: ToastrService,
     private modalService: NgbModal,
-    private filterService: FilterService
+    private filterService: FilterService,
+    private store: Store<AppState>
   ) {}
 
   open(content: any) {
     if (content) {
-      this.modalService.open(content);
+      this.modalService.open(content, { centered: true });
     }
   }
 
@@ -142,17 +147,8 @@ export class DogProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.provinces$.pipe(first()).subscribe(data => {
-      data.forEach(province => {
-        this.provinces.push(province);
-      });
-    }, shareReplay());
-
-    this.dogRazes$.pipe(first()).subscribe(data => {
-      data.forEach(raze => {
-        this.razes.push(raze);
-      });
-    }, shareReplay());
+    this.provinces$ = this.store.select(selectProvincesItems);
+    this.dogRazes$ = this.store.select(selectDogRazesItems);
 
     this.dog$.subscribe(dog => {
       this.dogPhotos = dog.photos;
@@ -318,7 +314,7 @@ export class DogProfileComponent implements OnInit {
               timeOut: 4000,
             }
           );
-          this.router.navigate(['/animals']);
+          window.location.reload();
         },
         err => {
           this.toastr.error(err.error.detail, '', { timeOut: 4000 });
@@ -359,10 +355,18 @@ export class DogProfileComponent implements OnInit {
   }
 
   checkProvince(province?: string): boolean {
-    return isProvince(this.provinces, province);
+    let provinces = [''];
+    this.store.select(selectProvincesItems).subscribe(data => {
+      provinces = data;
+    });
+    return isProvince(provinces, province);
   }
 
   checkDogRaze(raze?: string): boolean {
-    return isDogRaze(this.razes, raze);
+    let dogRazes = [''];
+    this.store.select(selectDogRazesItems).subscribe(data => {
+      dogRazes = data;
+    });
+    return isDogRaze(dogRazes, raze);
   }
 }

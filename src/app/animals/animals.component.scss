@@ -1,33 +1,20 @@
-.card {
-  background: black;
-}
-
-.card:hover {
-  transition: all 0.3s ease-in-out;
-  transform: scale(1.1);
-  box-shadow: 0 0 11px rgba(33, 33, 33, 0.2);
-}
-
-button:hover,
-label:hover {
-  transition: all 0.3s ease-in-out;
-  transform: scale(1.1);
-  box-shadow: 0 0 11px rgba(33, 33, 33, 0.2);
-}
-
 .list-group-item-info {
   background-color: #ffffff;
 }
 
 img {
-  max-height: 215px !important;
-  min-height: 215px !important;
+  max-height: 145px !important;
+  min-height: 145px !important;
 }
 
-h3 {
-  &:hover {
-    transition: all 0.3s ease-in-out;
-    transform: scale(1.1);
-    box-shadow: 0 0 11px rgba(33, 33, 33, 0.2);
-  }
+.mat-divider.mat-divider-vertical {
+  border-right-width: 2px !important;
+}
+.mat-divider-vertical {
+  border-right-color: #006fab !important;
+}
+
+span:hover {
+  transition: 0.2s all ease-in-out;
+  transform: scale(1.1);
 }

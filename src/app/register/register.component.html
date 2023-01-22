@@ -84,7 +84,7 @@
                       <datalist id="datalistOptions">
                         <option
                           [value]="province"
-                          *ngFor="let province of provinces"></option>
+                          *ngFor="let province of provinces$ | async"></option>
                       </datalist>
 
                       <small
@@ -135,19 +135,27 @@
                         placeholder="Contraseña de la organización"
                         aria-describedby="passwordHelpInline"
                         formControlName="password"
+                        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
                         class="form-control" />
                       <small
                         id="passwordHelpInline"
                         class="text-muted"
                         *ngIf="!password?.touched">
-                        Debe tener al menos 6 caracteres
+                        Debe tener al menos 8 caracteres con una mayúscula, un
+                        número y un carácter especial (@$!%*?&)
                       </small>
                       <small
                         class="text-danger"
                         *ngIf="
-                          password?.hasError('minlength') && password?.touched
+                          password?.hasError('pattern') && password?.touched
                         ">
-                        La contraseña tiene menos de 6 caracteres
+                        La contraseña debe:
+                        <ul>
+                          <li>Tener al menos 8 caracteres</li>
+                          <li>Tener al menos una mayúscula</li>
+                          <li>Tener al menos un número</li>
+                          <li>Tener al menos un carácter especial (@$!%*?&)</li>
+                        </ul>
                       </small>
                       <small
                         class="text-danger"
@@ -181,12 +189,20 @@
                       </small>
                     </div>
                   </div>
+                  <mat-checkbox
+                    (change)="terms = !terms"
+                    color="warn"
+                    style="margin-bottom: 1rem"
+                    matTooltipPosition="left"
+                    matTooltip="Me hago responsable de la vericidad y autoría de toda la información proporcionada así como de los animales que serán publicados en la página">
+                    Acepto los términos y condiciones
+                  </mat-checkbox>
 
                   <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
                     <button
                       type="button"
                       class="btn btn-primary btn-lg"
-                      [disabled]="registerForm.invalid"
+                      [disabled]="registerForm.invalid || !terms"
                       (click)="register()">
                       Registrar
                     </button>

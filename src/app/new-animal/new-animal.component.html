@@ -146,7 +146,9 @@
               placeholder="Buscar raza..." />
 
             <datalist id="datalistDogOptions">
-              <option [value]="raze" *ngFor="let raze of dogRazes"></option>
+              <option
+                [value]="raze"
+                *ngFor="let raze of dogRazes$ | async"></option>
             </datalist>
 
             <small
@@ -168,7 +170,9 @@
               placeholder="Buscar raza..." />
 
             <datalist id="datalistCatOptions">
-              <option [value]="raze" *ngFor="let raze of catRazes"></option>
+              <option
+                [value]="raze"
+                *ngFor="let raze of catRazes$ | async"></option>
             </datalist>
 
             <small
@@ -192,7 +196,7 @@
             <datalist id="datalistOptions">
               <option
                 [value]="province"
-                *ngFor="let province of provinces"></option>
+                *ngFor="let province of provinces$ | async"></option>
             </datalist>
 
             <small

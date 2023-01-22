@@ -9,6 +9,10 @@ import {
 } from '@angular/forms';
 import { AuthService } from '../../services/auth/auth.service';
 import { ToastrService } from 'ngx-toastr';
+import { LOAD_CATS, LOAD_DOGS } from '../state/actions/animals.actions';
+import { Store } from '@ngrx/store';
+import { AppState } from '../state/app.state';
+import { LOAD_ORGANIZATION } from '../state/actions/organization.actions';
 
 @Component({
   standalone: true,
@@ -34,7 +38,8 @@ export class LoginComponent {
   constructor(
     private router: Router,
     public authService: AuthService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private store: Store<AppState>
   ) {}
 
   get email() {

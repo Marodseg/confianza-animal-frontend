@@ -5,6 +5,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { JwtHelperService, JwtModule } from '@auth0/angular-jwt';
 import { ToastrModule } from 'ngx-toastr';
 import { RouterTestingModule } from '@angular/router/testing';
+import { StoreModule } from '@ngrx/store';
 
 describe('RegisterComponent', () => {
   let component: RegisterComponent;
@@ -17,6 +18,7 @@ describe('RegisterComponent', () => {
         HttpClientTestingModule,
         ToastrModule.forRoot(),
         RouterTestingModule,
+        StoreModule.forRoot({}),
         JwtModule.forRoot({
           config: {
             tokenGetter: () => {

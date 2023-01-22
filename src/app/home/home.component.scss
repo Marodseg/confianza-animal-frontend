@@ -1,8 +1,31 @@
-.nav-link:hover,
-.navbar-brand:hover {
+.nav-link:hover {
   transition: 0.2s all ease-in-out;
-  background-color: #007bff;
-  border-color: #007bff;
-  border-radius: 10px;
+  background-color: #d3851f;
+  border-color: #d3851f;
+  border-radius: 5px;
   transform: scale(1.1);
+}
+
+.navbar-brand:hover {
+  background-color: #d3851f;
+  transform: scale(1.1);
+  transition: 0.2s all ease-in-out;
+  border-radius: 5px;
+  padding: 0.5rem;
+}
+
+.nav-item:hover {
+  transform: scale(1.1);
+  transition: 0.2s all ease-in-out;
+}
+
+.btn {
+  background-color: #d3851f;
+  border-color: #d3851f;
+  border-radius: 5px;
+  &:hover {
+    color: #ffffff;
+    transform: scale(1.1);
+    transition: 0.2s all ease-in-out;
+  }
 }

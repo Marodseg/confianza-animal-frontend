@@ -4,6 +4,7 @@ import { DogProfileComponent } from './dog-profile.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ToastrModule } from 'ngx-toastr';
+import { StoreModule } from '@ngrx/store';
 
 describe('DogProfileComponent', () => {
   let component: DogProfileComponent;
@@ -16,6 +17,7 @@ describe('DogProfileComponent', () => {
         HttpClientTestingModule,
         RouterTestingModule,
         ToastrModule.forRoot(),
+        StoreModule.forRoot({}),
       ],
     }).compileComponents();
 

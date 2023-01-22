@@ -87,6 +87,7 @@ export interface DogCreate {
 }
 
 export interface DogUpdateIn {
+  id?: string;
   name?: string;
   age?: number;
   gender?: string;
@@ -117,8 +118,24 @@ export interface Petition {
   dog: Dog;
   cat: Cat;
   status: string;
-  message: string;
+  user_message: string;
+  organization_message?: string;
   organization_name: string;
+  visible: boolean;
+  info_updated: boolean;
+  docu_updated: boolean;
+  home_type: string;
+  home_type_bool: boolean;
+  free_time: string;
+  free_time_bool: boolean;
+  previous_experience: string;
+  previous_experience_bool: boolean;
+  frequency_travel: string;
+  frequency_travel_bool: boolean;
+  kids: string;
+  kids_bool: boolean;
+  other_animals: string;
+  other_animals_bool: boolean;
 }
 
 export interface AppUser {
@@ -129,4 +146,24 @@ export interface AppUser {
   dogs: [Dog];
   cats: [Cat];
   active: boolean;
+}
+
+// NGRX Interfaces
+export interface DogsState {
+  dogs: Dog[];
+  loading: boolean;
+}
+export interface CatsState {
+  cats: Cat[];
+  loading: boolean;
+}
+export interface FiltersState {
+  provinces: string[];
+  dogRazes: string[];
+  catRazes: string[];
+}
+export interface OrganizationState {
+  organization?: Organization;
+  loading: boolean;
+  petitions: Petition[];
 }
