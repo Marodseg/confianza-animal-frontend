@@ -81,14 +81,33 @@
             </div>
 
             <div class="mb-3">
-              <label class="small mb-1" for="inputAge">Edad (en años)</label>
+              <label class="small mb-1" for="inputMonths"
+                >Edad (en meses)</label
+              >
               <input
                 class="form-control"
-                id="inputAge"
-                formControlName="age"
+                id="inputMonths"
+                formControlName="months"
+                type="number"
+                placeholder="Edad (en meses)"
+                [value]="(dog$ | async)?.months" />
+
+              <small
+                class="text-danger"
+                *ngIf="checkMonths(months) && months?.touched">
+                Los meses deben estar entre 1 y 11
+              </small>
+            </div>
+
+            <div class="mb-3">
+              <label class="small mb-1" for="inputYears">Edad (en años)</label>
+              <input
+                class="form-control"
+                id="inputYears"
+                formControlName="years"
                 type="number"
                 placeholder="Edad (en años)"
-                [value]="(dog$ | async)?.age" />
+                [value]="(dog$ | async)?.years" />
             </div>
 
             <div class="mb-3">

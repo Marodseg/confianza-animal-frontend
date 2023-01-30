@@ -24,7 +24,8 @@ export interface RestorePasswordResponse {
 export interface Animal {
   id: string;
   name: string;
-  age: number;
+  years: number;
+  months: number;
   gender: string;
   photos: string[];
   weight: number;
@@ -67,29 +68,11 @@ export interface OrganizationUpdate {
   zone?: string;
 }
 
-export interface DogCreate {
-  name: string;
-  age: number;
-  gender: string;
-  weight: number;
-  size: string;
-  zone: string;
-  neutered: boolean | string;
-  description: string;
-  healthy: boolean | string;
-  wormed: boolean | string;
-  vaccinated: boolean | string;
-  birth_date?: Date;
-  activity_level: string;
-  microchip: boolean | string;
-  is_urgent: boolean | string;
-  raze: string;
-}
-
 export interface DogUpdateIn {
   id?: string;
   name?: string;
-  age?: number;
+  years?: number;
+  months?: number;
   gender?: string;
   photos?: string[];
   weight?: number;

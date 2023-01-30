@@ -101,10 +101,28 @@ export class AnimalService {
         name: dog.name,
       };
     }
-    if (dog.age) {
+    if (dog.years) {
       body = {
         ...body,
-        age: dog.age,
+        years: dog.years,
+      };
+    }
+    if (dog.months) {
+      body = {
+        ...body,
+        months: dog.months,
+      };
+    }
+    if (dog.years == 0) {
+      body = {
+        ...body,
+        years: dog.years,
+      };
+    }
+    if (dog.months == 0) {
+      body = {
+        ...body,
+        months: dog.months,
       };
     }
     if (dog.gender) {
@@ -198,6 +216,8 @@ export class AnimalService {
       };
     }
 
+    console.log('body', body);
+
     return this.http.put<Dog>(environment.editDog + '/' + id, body).pipe(
       map(
         data => {
@@ -218,10 +238,28 @@ export class AnimalService {
         name: cat.name,
       };
     }
-    if (cat.age) {
+    if (cat.years) {
       body = {
         ...body,
-        age: cat.age,
+        years: cat.years,
+      };
+    }
+    if (cat.months) {
+      body = {
+        ...body,
+        months: cat.months,
+      };
+    }
+    if (cat.years == 0) {
+      body = {
+        ...body,
+        years: cat.years,
+      };
+    }
+    if (cat.months == 0) {
+      body = {
+        ...body,
+        months: cat.months,
       };
     }
     if (cat.gender) {
@@ -364,7 +402,8 @@ export class AnimalService {
   public postDog(dog: any): Observable<Dog> {
     const body = {
       name: dog.name,
-      age: dog.age,
+      years: dog.years ? dog.years : null,
+      months: dog.months ? dog.months : null,
       gender: dog.gender == 'Macho' ? 'male' : 'female',
       weight: dog.weight,
       size:
@@ -410,7 +449,8 @@ export class AnimalService {
   public postCat(cat: any): Observable<Cat> {
     const body = {
       name: cat.name,
-      age: cat.age,
+      years: cat.years ? cat.years : null,
+      months: cat.months ? cat.months : null,
       gender: cat.gender == 'Macho' ? 'male' : 'female',
       weight: cat.weight,
       size:

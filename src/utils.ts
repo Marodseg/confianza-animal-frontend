@@ -138,3 +138,10 @@ export function isCatRaze(catRazes: string[], raze?: string): boolean {
   }
   return false;
 }
+
+export function checkMonthsValue(months?: any): boolean {
+  if (months) {
+    return months.value < 0 || months.value > 11;
+  }
+  return false;
+}

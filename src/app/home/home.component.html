@@ -32,12 +32,18 @@
       </ul>
 
       <ul class="navbar-nav ms-auto flex-nowrap">
-        <li class="nav-item">
+        <li
+          class="nav-item"
+          style="
+            border: 2px solid #d3851f;
+            padding: 0.5rem;
+            border-radius: 12px;
+          ">
           <i
             matTooltip="Logout"
             matTooltipPosition="left"
             class="bi bi-box-arrow-right"
-            style="color: #d3851f; font-size: 30px; cursor: pointer"
+            style="color: white; font-size: 30px; cursor: pointer"
             (click)="authService.logout(true)"></i>
         </li>
       </ul>

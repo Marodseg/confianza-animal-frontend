@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
+  AbstractControl,
   FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
 import {
+  checkMonthsValue,
   isActivityLevelOption,
   isBooleanOption,
   isGenderOption,
@@ -46,10 +48,8 @@ export class NewAnimalComponent implements OnInit {
       validators: [Validators.required],
       nonNullable: true,
     }),
-    age: new FormControl({
-      validators: [Validators.required],
-      nonNullable: true,
-    }),
+    years: new FormControl('', { nonNullable: false }),
+    months: new FormControl('', { nonNullable: false }),
     gender: new FormControl('', {
       validators: [Validators.required],
       nonNullable: true,
@@ -208,8 +208,12 @@ export class NewAnimalComponent implements OnInit {
     return this.newAnimalForm.get('name');
   }
 
-  get age() {
-    return this.newAnimalForm.get('age');
+  get years() {
+    return this.newAnimalForm.get('years');
+  }
+
+  get months() {
+    return this.newAnimalForm.get('months');
   }
 
   get weight() {
@@ -231,7 +235,8 @@ export class NewAnimalComponent implements OnInit {
   createDog() {
     const dog = {
       name: this.newAnimalForm.get('name')?.value,
-      age: this.newAnimalForm.get('age')?.value,
+      years: this.newAnimalForm.get('years')?.value,
+      months: this.newAnimalForm.get('months')?.value,
       gender: this.newAnimalForm.get('gender')?.value,
       weight: this.newAnimalForm.get('weight')?.value,
       size: this.newAnimalForm.get('size')?.value,
@@ -253,7 +258,8 @@ export class NewAnimalComponent implements OnInit {
   createCat() {
     const cat = {
       name: this.newAnimalForm.get('name')?.value,
-      age: this.newAnimalForm.get('age')?.value,
+      years: this.newAnimalForm.get('years')?.value,
+      months: this.newAnimalForm.get('months')?.value,
       gender: this.newAnimalForm.get('gender')?.value,
       weight: this.newAnimalForm.get('weight')?.value,
       size: this.newAnimalForm.get('size')?.value,
@@ -300,5 +306,9 @@ export class NewAnimalComponent implements OnInit {
       provinces = data;
     });
     return isProvince(provinces, province);
+  }
+
+  checkMonths(months?: any): boolean {
+    return checkMonthsValue(months);
   }
 }

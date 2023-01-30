@@ -20,6 +20,7 @@ import {
   isGenderOption,
   isProvince,
   isCatRaze,
+  checkMonthsValue,
 } from 'src/utils';
 import { FilterService } from '../../services/filter/filter.service';
 import { first, Observable, shareReplay } from 'rxjs';
@@ -45,7 +46,8 @@ export class CatProfileComponent implements OnInit {
   catRazes$ = new Observable<string[]>();
 
   initialName = '';
-  initialAge = 0;
+  initialYears = -1;
+  initialMonths = -1;
   initialGender = '';
   initialWeight = 0;
   initialSize = '';
@@ -63,7 +65,11 @@ export class CatProfileComponent implements OnInit {
 
   catForm = new FormGroup({
     name: new FormControl('', Validators.required),
-    age: new FormControl(0, Validators.required),
+    years: new FormControl(0, { nonNullable: false }),
+    months: new FormControl(0, {
+      validators: [Validators.min(1), Validators.max(11)],
+      nonNullable: false,
+    }),
     gender: new FormControl('', Validators.required),
     weight: new FormControl(0, Validators.required),
     size: new FormControl('', Validators.required),
@@ -140,6 +146,10 @@ export class CatProfileComponent implements OnInit {
     return this.catForm.get('zone');
   }
 
+  get months() {
+    return this.catForm.get('months');
+  }
+
   get activityLevel() {
     return this.catForm.get('activityLevel');
   }
@@ -150,7 +160,8 @@ export class CatProfileComponent implements OnInit {
 
     this.cat$.subscribe(cat => {
       this.initialName = cat.name;
-      this.initialAge = cat.age;
+      this.initialYears = cat.years;
+      this.initialMonths = cat.months;
       this.initialGender = cat.gender;
       this.initialWeight = cat.weight;
       this.initialSize = cat.size;
@@ -168,7 +179,8 @@ export class CatProfileComponent implements OnInit {
 
       this.catForm.patchValue({
         name: cat.name,
-        age: cat.age,
+        years: cat.years,
+        months: cat.months,
         gender: cat.gender,
         weight: cat.weight,
         size: cat.size,
@@ -202,9 +214,22 @@ export class CatProfileComponent implements OnInit {
     if (this.catForm.value.name !== this.initialName) {
       catParams = { ...catParams, name: this.catForm.value.name };
     }
-    if (this.catForm.value.age !== this.initialAge) {
-      catParams = { ...catParams, age: this.catForm.value.age };
+    if (this.catForm.value.years !== this.initialYears) {
+      if (this.catForm.value.years === null) {
+        catParams = { ...catParams, years: 0 };
+      } else {
+        catParams = { ...catParams, years: this.catForm.value.years };
+      }
     }
+
+    if (this.catForm.value.months !== this.initialMonths) {
+      if (this.catForm.value.months === null) {
+        catParams = { ...catParams, months: 0 };
+      } else {
+        catParams = { ...catParams, months: this.catForm.value.months };
+      }
+    }
+
     if (this.catForm.value.gender !== this.initialGender) {
       catParams = {
         ...catParams,
@@ -364,5 +389,9 @@ export class CatProfileComponent implements OnInit {
       catRazes = data;
     });
     return isCatRaze(catRazes, raze);
+  }
+
+  checkMonths(months?: any): boolean {
+    return checkMonthsValue(months);
   }
 }

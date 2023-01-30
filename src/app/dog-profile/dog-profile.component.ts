@@ -11,6 +11,7 @@ import { AnimalService } from '../../services/animals/animal.service';
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from '../../services/user/user.service';
 import {
+  checkMonthsValue,
   isActivityLevelOption,
   isBooleanOption,
   isDogRaze,
@@ -47,7 +48,8 @@ export class DogProfileComponent implements OnInit {
   dogRazes$ = new Observable<string[]>();
 
   initialName = '';
-  initialAge = 0;
+  initialYears = -1;
+  initialMonths = -1;
   initialGender = '';
   initialWeight = 0;
   initialSize = '';
@@ -65,7 +67,11 @@ export class DogProfileComponent implements OnInit {
 
   dogForm = new FormGroup({
     name: new FormControl('', Validators.required),
-    age: new FormControl(0, Validators.required),
+    years: new FormControl(0, { nonNullable: false }),
+    months: new FormControl(0, {
+      validators: [Validators.min(1), Validators.max(11)],
+      nonNullable: false,
+    }),
     gender: new FormControl('', Validators.required),
     weight: new FormControl(0, Validators.required),
     size: new FormControl('', Validators.required),
@@ -142,6 +148,10 @@ export class DogProfileComponent implements OnInit {
     return this.dogForm.get('zone');
   }
 
+  get months() {
+    return this.dogForm.get('months');
+  }
+
   get activityLevel() {
     return this.dogForm.get('activityLevel');
   }
@@ -154,7 +164,8 @@ export class DogProfileComponent implements OnInit {
       this.dogPhotos = dog.photos;
 
       this.initialName = dog.name;
-      this.initialAge = dog.age;
+      this.initialYears = dog.years;
+      this.initialMonths = dog.months;
       this.initialGender = dog.gender;
       this.initialWeight = dog.weight;
       this.initialSize = dog.size;
@@ -172,7 +183,8 @@ export class DogProfileComponent implements OnInit {
 
       this.dogForm.patchValue({
         name: dog.name,
-        age: dog.age,
+        years: dog.years,
+        months: dog.months,
         gender: dog.gender,
         weight: dog.weight,
         size: dog.size,
@@ -206,9 +218,22 @@ export class DogProfileComponent implements OnInit {
     if (this.dogForm.value.name !== this.initialName) {
       dogParams = { ...dogParams, name: this.dogForm.value.name };
     }
-    if (this.dogForm.value.age !== this.initialAge) {
-      dogParams = { ...dogParams, age: this.dogForm.value.age };
+    if (this.dogForm.value.years !== this.initialYears) {
+      if (this.dogForm.value.years === null) {
+        dogParams = { ...dogParams, years: 0 };
+      } else {
+        dogParams = { ...dogParams, years: this.dogForm.value.years };
+      }
     }
+
+    if (this.dogForm.value.months !== this.initialMonths) {
+      if (this.dogForm.value.months === null) {
+        dogParams = { ...dogParams, months: 0 };
+      } else {
+        dogParams = { ...dogParams, months: this.dogForm.value.months };
+      }
+    }
+
     if (this.dogForm.value.gender !== this.initialGender) {
       dogParams = {
         ...dogParams,
@@ -368,5 +393,9 @@ export class DogProfileComponent implements OnInit {
       dogRazes = data;
     });
     return isDogRaze(dogRazes, raze);
+  }
+
+  checkMonths(months?: any): boolean {
+    return checkMonthsValue(months);
   }
 }
