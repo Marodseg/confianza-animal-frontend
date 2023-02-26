@@ -223,11 +223,15 @@
           <p style="font-weight: 300">{{ petition.user_name }}</p>
           Correo del usuario:
           <p style="font-weight: 300">{{ petition.user_email }}</p>
-          Motivo de la adopción:
+          Mensaje del usuario:
           <p style="font-weight: 300">{{ petition.user_message }}</p>
           Fecha de creación:
           <p style="font-weight: 300">
             {{ petition.date | date : 'dd/MM/yyyy' }}
+          </p>
+          Última actualización:
+          <p style="font-weight: 300">
+            {{ petition.status_date | date : 'dd/MM/yyyy' }}
           </p>
           Estado actual:
           <p style="font-weight: 300">{{ petition.status }}</p>
@@ -459,7 +463,18 @@
               "
               type="button"
               class="btn btn-primary"
-              (click)="updatePetition(petition.id, orgMessage.value)">
+              (click)="
+                acceptInformation(
+                  petition.id,
+                  orgMessage.value,
+                  home_type_bool,
+                  free_time_bool,
+                  frequency_travel_bool,
+                  previous_experience_bool,
+                  kids_bool,
+                  other_animals_bool
+                )
+              ">
               Aprobar información
             </button>
           </div>

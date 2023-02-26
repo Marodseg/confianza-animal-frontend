@@ -98,6 +98,7 @@ export interface Petition {
   user_name: string;
   user_email: string;
   date: Date;
+  status_date: Date;
   dog: Dog;
   cat: Cat;
   status: string;

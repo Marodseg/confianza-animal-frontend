@@ -242,4 +242,40 @@ export class PetitionsComponent implements OnInit {
         }
       );
   }
+
+  acceptInformation(
+    id: string,
+    message: string,
+    home_type_bool: boolean,
+    free_time_bool: boolean,
+    frequency_travel_bool: boolean,
+    previous_experience_bool: boolean,
+    kids_bool: boolean,
+    other_pets_bool: boolean
+  ) {
+    this.userService
+      .acceptInformation(
+        id,
+        message,
+        home_type_bool,
+        free_time_bool,
+        frequency_travel_bool,
+        previous_experience_bool,
+        kids_bool,
+        other_pets_bool
+      )
+      .subscribe(
+        data => {
+          this.toastrService.success(
+            'La información se ha aceptado correctamente',
+            '',
+            { timeOut: 5000 }
+          );
+          window.location.reload();
+        },
+        error => {
+          this.toastrService.error(error.error.detail, '', { timeOut: 5000 });
+        }
+      );
+  }
 }

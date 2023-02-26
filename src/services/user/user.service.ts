@@ -169,7 +169,10 @@ export class UserService {
       take(1),
       map(
         data => {
-          return data;
+          // Return the data with date ordered
+          return data.sort((a, b) => {
+            return a.date > b.date ? -1 : 1;
+          });
         },
         catchError(error => {
           return error;
@@ -306,7 +309,50 @@ export class UserService {
 
     return this.http
       .post<any>(
-        environment.statusPetition + '/' + id + '/organization/information',
+        environment.statusPetition +
+          '/' +
+          id +
+          '/organization/reject-information',
+        {},
+        { params: params }
+      )
+      .pipe(
+        map(
+          data => {
+            return data;
+          },
+          catchError(error => {
+            return error;
+          })
+        )
+      );
+  }
+
+  public acceptInformation(
+    id: string,
+    message: string,
+    home_type_bool: boolean,
+    free_time_bool: boolean,
+    previous_experience_bool: boolean,
+    frequency_travel_bool: boolean,
+    kids_bool: boolean,
+    other_animals_bool: boolean
+  ): Observable<any> {
+    let params = new HttpParams();
+    params = params.set('message', message);
+    params = params.set('home_type_bool', home_type_bool);
+    params = params.set('free_time_bool', free_time_bool);
+    params = params.set('previous_experience_bool', previous_experience_bool);
+    params = params.set('frequency_travel_bool', frequency_travel_bool);
+    params = params.set('kids_bool', kids_bool);
+    params = params.set('other_animals_bool', other_animals_bool);
+
+    return this.http
+      .post<any>(
+        environment.statusPetition +
+          '/' +
+          id +
+          '/organization/accept-information',
         {},
         { params: params }
       )
