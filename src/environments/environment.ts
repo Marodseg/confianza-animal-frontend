@@ -2,10 +2,10 @@
 // `ng build` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-// const PROTOCOL = 'https';
-// const DOMAIN = 'confianza-animal-backend.onrender.com';
-const PROTOCOL = 'http';
-const DOMAIN = 'localhost:8000';
+const PROTOCOL = 'https';
+const DOMAIN = 'confianza-animal-backend.onrender.com';
+// const PROTOCOL = 'http';
+// const DOMAIN = 'localhost:8000';
 
 export const environment = {
   production: false,
