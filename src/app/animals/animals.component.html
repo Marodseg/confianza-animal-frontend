@@ -1,309 +1,315 @@
-<div
-  class="d-flex flex-row mt-3 justify-content-center mb-4"
-  style="width: 100%">
-  <div style="display: flex; gap: 1.5rem; font-size: 20px; color: #d3851f">
-    <span style="cursor: pointer; font-weight: 500" (click)="goToDogs()"
-      >Perros</span
-    >
-    <mat-divider vertical="true" style="color: #006fab"></mat-divider>
-    <span style="cursor: pointer; font-weight: 500" (click)="goToCats()"
-      >Gatos</span
-    >
+<div style="position: relative">
+  <div
+    class="d-flex flex-row mt-3 justify-content-center mb-4"
+    style="width: 100%">
+    <div style="display: flex; gap: 1.5rem; font-size: 20px; color: #d3851f">
+      <span style="cursor: pointer; font-weight: 500" (click)="goToDogs()"
+        >Perros</span
+      >
+      <mat-divider vertical="true" style="color: #006fab"></mat-divider>
+      <span style="cursor: pointer; font-weight: 500" (click)="goToCats()"
+        >Gatos</span
+      >
+    </div>
+    <i
+      class="bi bi-plus-circle-fill"
+      matTooltip="Nuevo animal"
+      style="
+        position: absolute;
+        bottom: 2rem;
+        right: 2rem;
+        border-radius: 20px;
+        font-size: 4rem;
+        color: #d3851f;
+        cursor: pointer;
+      "
+      id="show_more_cards"
+      (click)="newAnimal(true)">
+    </i>
   </div>
-  <i
-    class="bi bi-plus-circle-fill"
-    matTooltip="Nuevo animal"
-    style="
-      position: absolute;
-      bottom: 2rem;
-      right: 2rem;
-      border-radius: 20px;
-      font-size: 4rem;
-      color: #d3851f;
-      cursor: pointer;
-    "
-    id="show_more_cards"
-    (click)="newAnimal(true)">
-  </i>
+
+  <ng-container class="container" *ngIf="(loadingDogs$ | async) === false">
+    <div
+      class="row col-xs-12 col-sm-8 col-md-9"
+      style="justify-content: center; width: 100%">
+      <div
+        class="card p-2 m-3 shadow p-3 mb-5 rounded"
+        style="width: 14rem; background-color: #f3e8de59"
+        *ngFor="let dog of dogs$ | async">
+        <img
+          class="card-img-top rounded"
+          [src]="
+            dog.photos[0] !== undefined
+              ? dog.photos[0]
+              : 'https://dummyimage.com/254x190/ffffff/000000.png&text=No+hay+fotos'
+          " />
+        <div class="card-body text-center">
+          <h4 class="card-title" style="letter-spacing: 1.5px">
+            <b style="margin-right: 10px; font-weight: 500; font-size: 16px">{{
+              dog.name
+            }}</b>
+            <i
+              [ngClass]="{
+                'bi bi-gender-male': dog.gender === 'Macho',
+                'bi bi-gender-female': dog.gender === 'Hembra'
+              }"
+              style="font-size: 20px"></i>
+            <i
+              *ngIf="dog.is_urgent"
+              matTooltip="Adopción urgente"
+              matTooltipPosition="above"
+              class="bi bi-exclamation-triangle"
+              style="
+                color: red;
+                font-size: 20px;
+                position: absolute;
+                top: 1.2rem;
+                right: 1.2rem;
+                background: white;
+                height: 2rem;
+                width: 2rem;
+                display: flex;
+                border-radius: 44px;
+                align-items: center;
+                justify-content: center;
+              "></i>
+          </h4>
+
+          <div
+            style="
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              gap: 0.5rem;
+              font-size: 15px;
+              margin-bottom: 1rem;
+              padding: 1rem;
+              border: 2px solid #9897cd;
+              border-radius: 6px;
+            ">
+            <span style="display: flex; gap: 0.5rem"
+              >Castrado
+              <i
+                [ngClass]="{
+                  'bi bi-check': dog.neutered === true,
+                  'bi bi-x': dog.neutered === false
+                }"
+                style="font-size: 20px"
+                [ngStyle]="{
+                  color: dog.neutered === true ? 'green' : 'red'
+                }"></i
+            ></span>
+            <span style="display: flex; gap: 0.5rem"
+              >Microchip
+              <i
+                [ngClass]="{
+                  'bi bi-check': dog.microchip === true,
+                  'bi bi-x': dog.microchip === false
+                }"
+                style="font-size: 20px"
+                [ngStyle]="{
+                  color: dog.microchip === true ? 'green' : 'red'
+                }"></i
+            ></span>
+            <span style="display: flex; gap: 0.5rem"
+              >Vacunado
+              <i
+                [ngClass]="{
+                  'bi bi-check': dog.vaccinated === true,
+                  'bi bi-x': dog.vaccinated === false
+                }"
+                style="font-size: 20px"
+                [ngStyle]="{
+                  color: dog.vaccinated === true ? 'green' : 'red'
+                }"></i
+            ></span>
+          </div>
+
+          <div
+            style="
+              display: flex;
+              gap: 0.8rem;
+              justify-content: center;
+              font-size: 20px;
+            ">
+            <i
+              class="bi bi-trash3"
+              (click)="open(contentDog)"
+              style="color: red; cursor: pointer"
+              matTooltip="Eliminar"></i>
+            <i
+              class="bi bi-pencil"
+              (click)="editDog(dog?.id)"
+              style="color: #253227; cursor: pointer"
+              matTooltip="Editar"></i>
+          </div>
+
+          <ng-template #contentDog let-c="close" let-d="dismiss">
+            <div class="modal-header">
+              <h2 class="modal-title">Borrar animal</h2>
+              <button
+                type="button"
+                class="btn-close"
+                aria-label="Close"
+                (click)="d('Cross click')"></button>
+            </div>
+            <div class="modal-body">
+              <p>¿Estás seguro de que quieres borrar el animal?</p>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-outline-danger"
+                (click)="deleteDog(dog?.id)">
+                Borrar
+              </button>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container class="container" *ngIf="(loadingCats$ | async) === false">
+    <div
+      class="row col-xs-12 col-sm-8 col-md-9"
+      style="justify-content: center; width: 100%">
+      <div
+        class="card p-2 m-3 shadow p-3 mb-5 rounded"
+        style="width: 14rem; background-color: #f3e8de59"
+        *ngFor="let cat of cats$ | async">
+        <img
+          class="card-img-top rounded"
+          [src]="
+            cat.photos[0] !== undefined
+              ? cat.photos[0]
+              : 'https://dummyimage.com/254x190/ffffff/000000.png&text=No+hay+fotos'
+          " />
+        <div class="card-body text-center">
+          <h4 class="card-title" style="letter-spacing: 1.5px">
+            <b style="margin-right: 10px; font-weight: 500; font-size: 16px">{{
+              cat.name
+            }}</b>
+            <i
+              [ngClass]="{
+                'bi bi-gender-male': cat.gender === 'Macho',
+                'bi bi-gender-female': cat.gender === 'Hembra'
+              }"
+              style="font-size: 20px"></i>
+            <i
+              *ngIf="cat.is_urgent"
+              matTooltip="Adopción urgente"
+              matTooltipPosition="above"
+              class="bi bi-exclamation-triangle"
+              style="
+                color: red;
+                font-size: 20px;
+                position: absolute;
+                top: 1.2rem;
+                right: 1.2rem;
+                background: white;
+                height: 2rem;
+                width: 2rem;
+                display: flex;
+                border-radius: 44px;
+                align-items: center;
+                justify-content: center;
+              "></i>
+          </h4>
+
+          <div
+            style="
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              gap: 0.5rem;
+              font-size: 15px;
+              margin-bottom: 1rem;
+              padding: 1rem;
+              border: 2px solid #9897cd;
+              border-radius: 6px;
+            ">
+            <span style="display: flex; gap: 0.5rem"
+              >Castrado
+              <i
+                [ngClass]="{
+                  'bi bi-check': cat.neutered === true,
+                  'bi bi-x': cat.neutered === false
+                }"
+                style="font-size: 20px"
+                [ngStyle]="{
+                  color: cat.neutered === true ? 'green' : 'red'
+                }"></i
+            ></span>
+            <span style="display: flex; gap: 0.5rem"
+              >Microchip
+              <i
+                [ngClass]="{
+                  'bi bi-check': cat.microchip === true,
+                  'bi bi-x': cat.microchip === false
+                }"
+                style="font-size: 20px"
+                [ngStyle]="{
+                  color: cat.microchip === true ? 'green' : 'red'
+                }"></i
+            ></span>
+            <span style="display: flex; gap: 0.5rem"
+              >Vacunado
+              <i
+                [ngClass]="{
+                  'bi bi-check': cat.vaccinated === true,
+                  'bi bi-x': cat.vaccinated === false
+                }"
+                style="font-size: 20px"
+                [ngStyle]="{
+                  color: cat.vaccinated === true ? 'green' : 'red'
+                }"></i
+            ></span>
+          </div>
+
+          <div
+            style="
+              display: flex;
+              gap: 0.8rem;
+              justify-content: center;
+              font-size: 20px;
+            ">
+            <i
+              class="bi bi-trash3"
+              (click)="open(contentCat)"
+              style="color: red; cursor: pointer"
+              matTooltip="Eliminar"></i>
+            <i
+              class="bi bi-pencil"
+              (click)="editCat(cat?.id)"
+              style="color: #253227; cursor: pointer"
+              matTooltip="Editar"></i>
+          </div>
+
+          <ng-template #contentCat let-c="close" let-d="dismiss">
+            <div class="modal-header">
+              <h2 class="modal-title">Borrar animal</h2>
+              <button
+                type="button"
+                class="btn-close"
+                aria-label="Close"
+                (click)="d('Cross click')"></button>
+            </div>
+            <div class="modal-body">
+              <p>¿Estás seguro de que quieres borrar el animal?</p>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-outline-danger"
+                (click)="deleteCat(cat?.id)">
+                Borrar
+              </button>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  <router-outlet></router-outlet>
 </div>
-
-<ng-container class="container" *ngIf="(loadingDogs$ | async) === false">
-  <div
-    class="row col-xs-12 col-sm-8 col-md-9"
-    style="justify-content: center; width: 100%">
-    <div
-      class="card p-2 m-3 shadow p-3 mb-5 rounded"
-      style="width: 14rem; background-color: #f3e8de59"
-      *ngFor="let dog of dogs$ | async">
-      <img
-        class="card-img-top rounded"
-        [src]="
-          dog.photos[0] !== undefined
-            ? dog.photos[0]
-            : 'https://dummyimage.com/254x190/ffffff/000000.png&text=No+hay+fotos'
-        " />
-      <div class="card-body text-center">
-        <h4 class="card-title" style="letter-spacing: 1.5px">
-          <b style="margin-right: 10px; font-weight: 500; font-size: 16px">{{
-            dog.name
-          }}</b>
-          <i
-            [ngClass]="{
-              'bi bi-gender-male': dog.gender === 'Macho',
-              'bi bi-gender-female': dog.gender === 'Hembra'
-            }"
-            style="font-size: 20px"></i>
-          <i
-            *ngIf="dog.is_urgent"
-            matTooltip="Adopción urgente"
-            matTooltipPosition="above"
-            class="bi bi-exclamation-triangle"
-            style="
-              color: red;
-              font-size: 20px;
-              position: absolute;
-              top: 1.2rem;
-              right: 1.2rem;
-              background: white;
-              height: 2rem;
-              width: 2rem;
-              display: flex;
-              border-radius: 44px;
-              align-items: center;
-              justify-content: center;
-            "></i>
-        </h4>
-
-        <div
-          style="
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 15px;
-            margin-bottom: 1rem;
-            padding: 1rem;
-            border: 2px solid #9897cd;
-            border-radius: 6px;
-          ">
-          <span style="display: flex; gap: 0.5rem"
-            >Castrado
-            <i
-              [ngClass]="{
-                'bi bi-check': dog.neutered === true,
-                'bi bi-x': dog.neutered === false
-              }"
-              style="font-size: 20px"
-              [ngStyle]="{ color: dog.neutered === true ? 'green' : 'red' }"></i
-          ></span>
-          <span style="display: flex; gap: 0.5rem"
-            >Microchip
-            <i
-              [ngClass]="{
-                'bi bi-check': dog.microchip === true,
-                'bi bi-x': dog.microchip === false
-              }"
-              style="font-size: 20px"
-              [ngStyle]="{
-                color: dog.microchip === true ? 'green' : 'red'
-              }"></i
-          ></span>
-          <span style="display: flex; gap: 0.5rem"
-            >Vacunado
-            <i
-              [ngClass]="{
-                'bi bi-check': dog.vaccinated === true,
-                'bi bi-x': dog.vaccinated === false
-              }"
-              style="font-size: 20px"
-              [ngStyle]="{
-                color: dog.vaccinated === true ? 'green' : 'red'
-              }"></i
-          ></span>
-        </div>
-
-        <div
-          style="
-            display: flex;
-            gap: 0.8rem;
-            justify-content: center;
-            font-size: 20px;
-          ">
-          <i
-            class="bi bi-trash3"
-            (click)="open(contentDog)"
-            style="color: red; cursor: pointer"
-            matTooltip="Eliminar"></i>
-          <i
-            class="bi bi-pencil"
-            (click)="editDog(dog?.id)"
-            style="color: #253227; cursor: pointer"
-            matTooltip="Editar"></i>
-        </div>
-
-        <ng-template #contentDog let-c="close" let-d="dismiss">
-          <div class="modal-header">
-            <h2 class="modal-title">Borrar animal</h2>
-            <button
-              type="button"
-              class="btn-close"
-              aria-label="Close"
-              (click)="d('Cross click')"></button>
-          </div>
-          <div class="modal-body">
-            <p>¿Estás seguro de que quieres borrar el animal?</p>
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-outline-danger"
-              (click)="deleteDog(dog?.id)">
-              Borrar
-            </button>
-          </div>
-        </ng-template>
-      </div>
-    </div>
-  </div>
-</ng-container>
-
-<ng-container class="container" *ngIf="(loadingCats$ | async) === false">
-  <div
-    class="row col-xs-12 col-sm-8 col-md-9"
-    style="justify-content: center; width: 100%">
-    <div
-      class="card p-2 m-3 shadow p-3 mb-5 rounded"
-      style="width: 14rem; background-color: #f3e8de59"
-      *ngFor="let cat of cats$ | async">
-      <img
-        class="card-img-top rounded"
-        [src]="
-          cat.photos[0] !== undefined
-            ? cat.photos[0]
-            : 'https://dummyimage.com/254x190/ffffff/000000.png&text=No+hay+fotos'
-        " />
-      <div class="card-body text-center">
-        <h4 class="card-title" style="letter-spacing: 1.5px">
-          <b style="margin-right: 10px; font-weight: 500; font-size: 16px">{{
-            cat.name
-          }}</b>
-          <i
-            [ngClass]="{
-              'bi bi-gender-male': cat.gender === 'Macho',
-              'bi bi-gender-female': cat.gender === 'Hembra'
-            }"
-            style="font-size: 20px"></i>
-          <i
-            *ngIf="cat.is_urgent"
-            matTooltip="Adopción urgente"
-            matTooltipPosition="above"
-            class="bi bi-exclamation-triangle"
-            style="
-              color: red;
-              font-size: 20px;
-              position: absolute;
-              top: 1.2rem;
-              right: 1.2rem;
-              background: white;
-              height: 2rem;
-              width: 2rem;
-              display: flex;
-              border-radius: 44px;
-              align-items: center;
-              justify-content: center;
-            "></i>
-        </h4>
-
-        <div
-          style="
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 15px;
-            margin-bottom: 1rem;
-            padding: 1rem;
-            border: 2px solid #9897cd;
-            border-radius: 6px;
-          ">
-          <span style="display: flex; gap: 0.5rem"
-            >Castrado
-            <i
-              [ngClass]="{
-                'bi bi-check': cat.neutered === true,
-                'bi bi-x': cat.neutered === false
-              }"
-              style="font-size: 20px"
-              [ngStyle]="{ color: cat.neutered === true ? 'green' : 'red' }"></i
-          ></span>
-          <span style="display: flex; gap: 0.5rem"
-            >Microchip
-            <i
-              [ngClass]="{
-                'bi bi-check': cat.microchip === true,
-                'bi bi-x': cat.microchip === false
-              }"
-              style="font-size: 20px"
-              [ngStyle]="{
-                color: cat.microchip === true ? 'green' : 'red'
-              }"></i
-          ></span>
-          <span style="display: flex; gap: 0.5rem"
-            >Vacunado
-            <i
-              [ngClass]="{
-                'bi bi-check': cat.vaccinated === true,
-                'bi bi-x': cat.vaccinated === false
-              }"
-              style="font-size: 20px"
-              [ngStyle]="{
-                color: cat.vaccinated === true ? 'green' : 'red'
-              }"></i
-          ></span>
-        </div>
-
-        <div
-          style="
-            display: flex;
-            gap: 0.8rem;
-            justify-content: center;
-            font-size: 20px;
-          ">
-          <i
-            class="bi bi-trash3"
-            (click)="open(contentCat)"
-            style="color: red; cursor: pointer"
-            matTooltip="Eliminar"></i>
-          <i
-            class="bi bi-pencil"
-            (click)="editCat(cat?.id)"
-            style="color: #253227; cursor: pointer"
-            matTooltip="Editar"></i>
-        </div>
-
-        <ng-template #contentCat let-c="close" let-d="dismiss">
-          <div class="modal-header">
-            <h2 class="modal-title">Borrar animal</h2>
-            <button
-              type="button"
-              class="btn-close"
-              aria-label="Close"
-              (click)="d('Cross click')"></button>
-          </div>
-          <div class="modal-body">
-            <p>¿Estás seguro de que quieres borrar el animal?</p>
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-outline-danger"
-              (click)="deleteCat(cat?.id)">
-              Borrar
-            </button>
-          </div>
-        </ng-template>
-      </div>
-    </div>
-  </div>
-</ng-container>
-<router-outlet></router-outlet>
