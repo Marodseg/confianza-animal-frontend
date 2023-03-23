@@ -23,6 +23,17 @@ export class AnimalsEffects {
       ofType(LOAD_DOGS),
       mergeMap(() =>
         this.userService.getDogs().pipe(
+          map(dogs => {
+            return dogs.sort((a, b) => {
+              if (a.name < b.name) {
+                return -1;
+              }
+              if (a.name > b.name) {
+                return 1;
+              }
+              return 0;
+            });
+          }),
           map(dogs => LOADED_DOGS({ dogs })),
           catchError(() => EMPTY)
         )
@@ -53,6 +64,17 @@ export class AnimalsEffects {
       ofType(LOAD_CATS),
       mergeMap(() =>
         this.userService.getCats().pipe(
+          map(cats => {
+            return cats.sort((a, b) => {
+              if (a.name < b.name) {
+                return -1;
+              }
+              if (a.name > b.name) {
+                return 1;
+              }
+              return 0;
+            });
+          }),
           map(cats => LOADED_CATS({ cats })),
           catchError(() => EMPTY)
         )
@@ -78,27 +100,6 @@ export class AnimalsEffects {
       )
     )
   );
-
-  // editDog$ = createEffect(() =>
-  //   this.actions$.pipe(
-  //       ofType(EDIT_DOG),
-  //         switchMap(action =>
-  //           this.animalService.editDog(action.dog, (action.dog.id !== undefined ? action.dog.id : 'hola')).pipe(
-  //               catchError(() => EMPTY),
-  //                 map(dog => EDITED_DOG({ dog })),
-  //                     tap(() => {
-  //                           this.router.navigate(['/edit/dog/' + action.dog.id]);
-  //                           }),
-  //                                 tap(() => {
-  //                                       this.toastr.success('Se ha editado el animal correctamente', '', {
-  //                                                 timeOut: 4000,
-  //                                                         })
-  //                                                               }
-  //                                                                   )
-  //                                                                       )
-  //           )
-  //       )
-  //   );
 
   constructor(
     private actions$: Actions,

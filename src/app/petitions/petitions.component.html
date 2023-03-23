@@ -227,11 +227,11 @@
           <p style="font-weight: 300">{{ petition.user_message }}</p>
           Fecha de creación:
           <p style="font-weight: 300">
-            {{ petition.date | date : 'dd/MM/yyyy' }}
+            {{ petition.date | date : 'dd/MM/yyyy // HH:mm' }}
           </p>
           Última actualización:
           <p style="font-weight: 300">
-            {{ petition.status_date | date : 'dd/MM/yyyy' }}
+            {{ petition.status_date | date : 'dd/MM/yyyy // HH:mm' }}
           </p>
           Estado actual:
           <p style="font-weight: 300">{{ petition.status }}</p>
